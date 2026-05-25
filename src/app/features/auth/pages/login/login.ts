@@ -1,35 +1,45 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { form, FormField, required, submit } from '@angular/forms/signals';
 
 import { AuthService } from '../../../../core/services/auth';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [FormsModule],
+  imports: [FormField],
   templateUrl: './login.html',
   styleUrl: './login.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Login {
-  login = '';
-  password = '';
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
 
-  constructor(
-    private router: Router,
-    private authService: AuthService
-  ) {}
+  readonly errorMessage = signal<string | null>(null);
 
-  onSubmit() {
-    const isValid = this.authService.login(
-      this.login,
-      this.password
-    );
+  readonly loginModel = signal({
+    login: '',
+    password: '',
+  });
 
-    if (isValid) {
-      this.router.navigate(['/users']);
-    } else {
-      alert('Invalid credentials');
-    }
+  readonly loginForm = form(this.loginModel, (schemaPath) => {
+    required(schemaPath.login, { message: 'Login is required' });
+    required(schemaPath.password, { message: 'Password is required' });
+  });
+
+  onSubmit(): void {
+    this.errorMessage.set(null);
+
+    submit(this.loginForm, async () => {
+      const { login, password } = this.loginModel();
+      const isValid = this.authService.login(login, password);
+
+      if (isValid) {
+        await this.router.navigate(['/users']);
+        return;
+      }
+
+      this.errorMessage.set('Invalid credentials');
+    });
   }
 }

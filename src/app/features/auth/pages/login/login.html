@@ -1,11 +1,31 @@
 <div class="login-page">
-    <form class="login-form" (ngSubmit)="onSubmit()">
-        <h1>Login</h1>
+  <form class="login-form" (submit)="onSubmit(); $event.preventDefault()" novalidate>
+    <h1>Login</h1>
 
-        <input type="text" placeholder="Login" [(ngModel)]="login" name="login" />
+    <label>
+      <span class="field-label">Login</span>
+      <input
+        type="text"
+        placeholder="Login"
+        autocomplete="username"
+        [formField]="loginForm.login"
+      />
+    </label>
 
-        <input type="password" placeholder="Password" [(ngModel)]="password" name="password" />
+    <label>
+      <span class="field-label">Password</span>
+      <input
+        type="password"
+        placeholder="Password"
+        autocomplete="current-password"
+        [formField]="loginForm.password"
+      />
+    </label>
 
-        <button type="submit">Sign In</button>
-    </form>
+    @if (errorMessage(); as message) {
+      <p class="error-message" role="alert" aria-live="polite">{{ message }}</p>
+    }
+
+    <button type="submit">Sign In</button>
+  </form>
 </div>

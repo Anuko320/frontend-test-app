@@ -1,107 +1,101 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { Router } from '@angular/router';
-import { UsersService } from '../../services/users';
-import { User } from '../../../../core/models/user';
+import { form, FormField, required, submit } from '@angular/forms/signals';
+
+import { AuthService } from '../../../../core/services/auth';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-users-list',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormField],
   templateUrl: './users-list.html',
-  styleUrls: ['./users-list.scss'],
+  styleUrl: './users-list.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UsersList implements OnInit {
-  private usersService = inject(UsersService);
-  private router = inject(Router);
+export class UsersList {
+  private readonly usersService = inject(UsersService);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
-  users: User[] = [];
-  filteredUsers: User[] = [];
+  readonly users = this.usersService.users;
+  readonly loading = this.usersService.loading;
+  readonly error = this.usersService.error;
 
-  search = '';
+  readonly search = signal('');
+  readonly pendingDeleteId = signal<number | null>(null);
 
-  newUserName = '';
-  newUserEmail = '';
-  newUserPhone = '';
+  readonly filteredUsers = computed(() => {
+    const query = this.search().trim().toLowerCase();
+    const list = this.users();
 
-  ngOnInit(): void {
-  const savedUsers = localStorage.getItem('users');
+    if (!query) {
+      return list;
+    }
 
-  if (savedUsers) {
-    this.users = JSON.parse(savedUsers);
-    this.filteredUsers = this.users;
+    return list.filter((user) => user.name.toLowerCase().includes(query));
+  });
 
-    return;
+  readonly newUserModel = signal({
+    name: '',
+    email: '',
+    phone: '',
+  });
+
+  readonly newUserForm = form(this.newUserModel, (schemaPath) => {
+    required(schemaPath.name, { message: 'Name is required' });
+    required(schemaPath.email, { message: 'Email is required' });
+    required(schemaPath.phone, { message: 'Phone is required' });
+  });
+
+  readonly canAddUser = computed(() => this.newUserForm().valid());
+
+  constructor() {
+    this.usersService.init();
   }
 
-  this.usersService.getUsers().subscribe((users) => {
-    this.users = users;
-    this.filteredUsers = users;
-
-    this.saveUsers();
-  });
-}
-
-logout(): void {
-  localStorage.removeItem('isAuthenticated');
-
-  this.router.navigate(['/login']);
-}
-
-  onSearch(): void {
-    this.filteredUsers = this.users.filter((user) =>
-      user.name.toLowerCase().includes(this.search.toLowerCase())
-    );
+  onSearchInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.search.set(value);
   }
 
   addUser(): void {
-
-  if (
-    !this.newUserName.trim() ||
-    !this.newUserEmail.trim() ||
-    !this.newUserPhone.trim()
-  ) {
-    return;
+    submit(this.newUserForm, async () => {
+      const model = this.newUserModel();
+      this.usersService.addUser({
+        name: model.name,
+        email: model.email,
+        phone: model.phone,
+      });
+      this.newUserModel.set({ name: '', email: '', phone: '' });
+    });
   }
 
-  const newUser: User = {
-    id: Date.now(),
-    name: this.newUserName,
-    email: this.newUserEmail,
-    phone: this.newUserPhone,
-  };
-
-  this.users.unshift(newUser);
-
-  this.saveUsers();
-
-  this.onSearch();
-
-  this.newUserName = '';
-  this.newUserEmail = '';
-  this.newUserPhone = '';
-}
-
-  private saveUsers(): void {
-    localStorage.setItem('users', JSON.stringify(this.users));
+  requestDelete(id: number): void {
+    this.pendingDeleteId.set(id);
   }
 
-  deleteUser(id: number): void {
-  const confirmed = confirm(
-    'Are you sure you want to delete this user?'
-  );
-
-  if (!confirmed) {
-    return;
+  cancelDelete(): void {
+    this.pendingDeleteId.set(null);
   }
 
-  this.users = this.users.filter(
-    user => user.id !== id
-  );
+  confirmDelete(): void {
+    const id = this.pendingDeleteId();
+    if (id === null) {
+      return;
+    }
 
-  this.onSearch();
+    this.usersService.deleteUser(id);
+    this.pendingDeleteId.set(null);
+  }
 
-  this.saveUsers();
-}
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }
