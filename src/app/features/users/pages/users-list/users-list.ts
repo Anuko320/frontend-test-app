@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { Router } from '@angular/router';
 import { UsersService } from '../../services/users';
 import { User } from '../../../../core/models/user';
 
@@ -10,10 +10,11 @@ import { User } from '../../../../core/models/user';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './users-list.html',
-  styleUrl: './users-list.scss',
+  styleUrls: ['./users-list.scss'],
 })
 export class UsersList implements OnInit {
   private usersService = inject(UsersService);
+  private router = inject(Router);
 
   users: User[] = [];
   filteredUsers: User[] = [];
@@ -42,32 +43,38 @@ export class UsersList implements OnInit {
   });
 }
 
+logout(): void {
+  localStorage.removeItem('isAuthenticated');
+
+  this.router.navigate(['/login']);
+}
+
   onSearch(): void {
     this.filteredUsers = this.users.filter((user) =>
       user.name.toLowerCase().includes(this.search.toLowerCase())
     );
   }
 
-addUser(): void {
-  const newUser: User = {
-    id: Date.now(),
-    name: this.newUserName,
-    email: this.newUserEmail,
-    phone: this.newUserPhone,
-  };
+  addUser(): void {
+    const newUser: User = {
+      id: Date.now(),
+      name: this.newUserName,
+      email: this.newUserEmail,
+      phone: this.newUserPhone,
+    };
 
-  this.users.unshift(newUser);
+    this.users.unshift(newUser);
 
-  this.saveUsers();
+    this.saveUsers();
 
-  this.onSearch();
+    this.onSearch();
 
-  this.newUserName = '';
-  this.newUserEmail = '';
-  this.newUserPhone = '';
-}
+    this.newUserName = '';
+    this.newUserEmail = '';
+    this.newUserPhone = '';
+  }
 
-private saveUsers(): void {
-  localStorage.setItem('users', JSON.stringify(this.users));
-}
+  private saveUsers(): void {
+    localStorage.setItem('users', JSON.stringify(this.users));
+  }
 }
