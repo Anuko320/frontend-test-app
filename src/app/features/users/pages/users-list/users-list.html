@@ -30,9 +30,16 @@
     [(ngModel)]="newUserPhone"
   />
 
-  <button (click)="addUser()">
-    Add User
-  </button>
+  <button
+  (click)="addUser()"
+  [disabled]="
+    !newUserName.trim() ||
+    !newUserEmail.trim() ||
+    !newUserPhone.trim()
+  "
+>
+  Add User
+</button>
 </div>
 
 <div *ngFor="let user of filteredUsers">
@@ -41,6 +48,13 @@
   <p>{{ user.email }}</p>
 
   <p>{{ user.phone }}</p>
+
+  <button
+    class="delete-btn"
+    (click)="deleteUser(user.id)"
+  >
+    Delete
+  </button>
 
   <hr />
 </div>

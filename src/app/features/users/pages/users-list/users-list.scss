@@ -14,5 +14,32 @@
 
 .add-user-form button {
   padding: 10px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: hsl(89, 84%, 60%);
+  color: white;
+  transition: 0.2s ease;
   cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.delete-btn {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ef4444;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.delete-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }

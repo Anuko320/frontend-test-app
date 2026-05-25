@@ -56,25 +56,52 @@ logout(): void {
   }
 
   addUser(): void {
-    const newUser: User = {
-      id: Date.now(),
-      name: this.newUserName,
-      email: this.newUserEmail,
-      phone: this.newUserPhone,
-    };
 
-    this.users.unshift(newUser);
-
-    this.saveUsers();
-
-    this.onSearch();
-
-    this.newUserName = '';
-    this.newUserEmail = '';
-    this.newUserPhone = '';
+  if (
+    !this.newUserName.trim() ||
+    !this.newUserEmail.trim() ||
+    !this.newUserPhone.trim()
+  ) {
+    return;
   }
+
+  const newUser: User = {
+    id: Date.now(),
+    name: this.newUserName,
+    email: this.newUserEmail,
+    phone: this.newUserPhone,
+  };
+
+  this.users.unshift(newUser);
+
+  this.saveUsers();
+
+  this.onSearch();
+
+  this.newUserName = '';
+  this.newUserEmail = '';
+  this.newUserPhone = '';
+}
 
   private saveUsers(): void {
     localStorage.setItem('users', JSON.stringify(this.users));
   }
+
+  deleteUser(id: number): void {
+  const confirmed = confirm(
+    'Are you sure you want to delete this user?'
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  this.users = this.users.filter(
+    user => user.id !== id
+  );
+
+  this.onSearch();
+
+  this.saveUsers();
+}
 }
