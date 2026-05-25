@@ -7,6 +7,30 @@
   (input)="onSearch()"
 />
 
+<div class="add-user-form">
+  <input
+    type="text"
+    placeholder="Name"
+    [(ngModel)]="newUserName"
+  />
+
+  <input
+    type="email"
+    placeholder="Email"
+    [(ngModel)]="newUserEmail"
+  />
+
+  <input
+    type="text"
+    placeholder="Phone"
+    [(ngModel)]="newUserPhone"
+  />
+
+  <button (click)="addUser()">
+    Add User
+  </button>
+</div>
+
 <div *ngFor="let user of filteredUsers">
   <h3>{{ user.name }}</h3>
 

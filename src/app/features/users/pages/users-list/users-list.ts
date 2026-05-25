@@ -20,18 +20,54 @@ export class UsersList implements OnInit {
 
   search = '';
 
-  ngOnInit(): void {
-    this.usersService.getUsers().subscribe((users) => {
-      console.log(users);
+  newUserName = '';
+  newUserEmail = '';
+  newUserPhone = '';
 
-      this.users = users;
-      this.filteredUsers = users;
-    });
+  ngOnInit(): void {
+  const savedUsers = localStorage.getItem('users');
+
+  if (savedUsers) {
+    this.users = JSON.parse(savedUsers);
+    this.filteredUsers = this.users;
+
+    return;
   }
+
+  this.usersService.getUsers().subscribe((users) => {
+    this.users = users;
+    this.filteredUsers = users;
+
+    this.saveUsers();
+  });
+}
 
   onSearch(): void {
     this.filteredUsers = this.users.filter((user) =>
       user.name.toLowerCase().includes(this.search.toLowerCase())
     );
   }
+
+addUser(): void {
+  const newUser: User = {
+    id: Date.now(),
+    name: this.newUserName,
+    email: this.newUserEmail,
+    phone: this.newUserPhone,
+  };
+
+  this.users.unshift(newUser);
+
+  this.saveUsers();
+
+  this.onSearch();
+
+  this.newUserName = '';
+  this.newUserEmail = '';
+  this.newUserPhone = '';
+}
+
+private saveUsers(): void {
+  localStorage.setItem('users', JSON.stringify(this.users));
+}
 }
