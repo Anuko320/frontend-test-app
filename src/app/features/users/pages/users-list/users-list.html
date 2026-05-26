@@ -1,7 +1,7 @@
 <div class="users-page">
   <header class="users-header">
     <h1>Users</h1>
-    <button type="button" class="logout-btn" (click)="logout()">Logout</button>
+    <button type="button" class="btn btn-secondary" (click)="logout()">Logout</button>
   </header>
 
   <label class="search-field">
@@ -15,29 +15,51 @@
     />
   </label>
 
-  <section class="add-user-section" aria-labelledby="add-user-heading">
-    <h2 id="add-user-heading">Add user</h2>
+  <section class="add-user-section">
+    <button
+      type="button"
+      class="btn btn-primary add-user-toggle"
+      (click)="toggleAddUserPanel()"
+      [attr.aria-expanded]="showAddUserPanel()"
+      aria-controls="add-user-panel"
+    >
+      Add user
+    </button>
 
-    <form class="add-user-form" (submit)="addUser(); $event.preventDefault()">
-      <label>
-        <span class="field-label">Name</span>
-        <input type="text" placeholder="Name" [formField]="newUserForm.name" />
-      </label>
+    @if (showAddUserPanel()) {
+      <div id="add-user-panel" class="add-user-panel">
+        <form class="add-user-form" (submit)="addUser(); $event.preventDefault()">
+          <label>
+            <span class="field-label">Name</span>
+            <input type="text" placeholder="Name" [formField]="newUserForm.name" />
+          </label>
 
-      <label>
-        <span class="field-label">Email</span>
-        <input type="email" placeholder="Email" [formField]="newUserForm.email" />
-      </label>
+          <label>
+            <span class="field-label">Email</span>
+            <input type="email" placeholder="Email" [formField]="newUserForm.email" />
+          </label>
 
-      <label>
-        <span class="field-label">Phone</span>
-        <input type="tel" placeholder="Phone" [formField]="newUserForm.phone" />
-      </label>
+          <label>
+            <span class="field-label">Phone</span>
+            <input type="tel" placeholder="Phone" [formField]="newUserForm.phone" />
+          </label>
 
-      <button type="submit" [disabled]="!canAddUser()" [attr.aria-disabled]="!canAddUser()">
-        Add User
-      </button>
-    </form>
+          <div class="add-user-actions">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!canAddUser()"
+              [attr.aria-disabled]="!canAddUser()"
+            >
+              Save
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="closeAddUserPanel()">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    }
   </section>
 
   @if (loading()) {
@@ -59,12 +81,12 @@
           <div class="delete-confirm" role="group" [attr.aria-label]="'Confirm delete ' + user.name">
             <p>Delete this user?</p>
             <div class="delete-confirm-actions">
-              <button type="button" class="confirm-btn" (click)="confirmDelete()">Confirm</button>
-              <button type="button" class="cancel-btn" (click)="cancelDelete()">Cancel</button>
+              <button type="button" class="btn btn-danger" (click)="confirmDelete()">Confirm</button>
+              <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
             </div>
           </div>
         } @else {
-          <button type="button" class="delete-btn" (click)="requestDelete(user.id)">
+          <button type="button" class="btn btn-danger delete-btn" (click)="requestDelete(user.id)">
             Delete
           </button>
         }

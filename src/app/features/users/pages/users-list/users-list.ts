@@ -29,6 +29,7 @@ export class UsersList {
 
   readonly search = signal('');
   readonly pendingDeleteId = signal<number | null>(null);
+  readonly showAddUserPanel = signal(false);
 
   readonly filteredUsers = computed(() => {
     const query = this.search().trim().toLowerCase();
@@ -64,6 +65,14 @@ export class UsersList {
     this.search.set(value);
   }
 
+  toggleAddUserPanel(): void {
+    this.showAddUserPanel.update((open) => !open);
+  }
+
+  closeAddUserPanel(): void {
+    this.showAddUserPanel.set(false);
+  }
+
   addUser(): void {
     submit(this.newUserForm, async () => {
       const model = this.newUserModel();
@@ -73,6 +82,7 @@ export class UsersList {
         phone: model.phone,
       });
       this.newUserModel.set({ name: '', email: '', phone: '' });
+      this.showAddUserPanel.set(false);
     });
   }
 
