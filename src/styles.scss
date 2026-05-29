@@ -101,6 +101,43 @@
 
   --page-max-width: 56rem;
   --header-height: 4rem;
+
+  --color-topbar-bg: rgb(255 255 255 / 0.85);
+  --color-auth-glow: var(--accent-100);
+}
+
+[data-theme='dark'] {
+  --color-bg: #0f172a;
+  --color-bg-elevated: #1e293b;
+  --color-surface: #1e293b;
+  --color-surface-muted: #273449;
+  --color-surface-hover: #334155;
+  --color-border: #334155;
+  --color-border-strong: #475569;
+  --color-text: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-subtle: #64748b;
+
+  --color-primary-subtle: rgb(37 99 235 / 0.18);
+  --color-auth-glow: rgb(37 99 235 / 0.22);
+  --color-topbar-bg: rgb(15 23 42 / 0.88);
+
+  --color-success-bg: rgb(5 150 105 / 0.18);
+  --color-success-text: #6ee7b7;
+  --color-danger-bg: rgb(198 40 40 / 0.18);
+  --color-danger-text: #fca5a5;
+  --color-danger-border: rgb(239 68 68 / 0.35);
+  --color-warning-bg: rgb(180 83 9 / 0.18);
+  --color-warning-text: #fcd34d;
+
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.25);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.35), 0 1px 2px rgb(0 0 0 / 0.25);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.45), 0 4px 6px -4px rgb(0 0 0 / 0.35);
+  --shadow-focus: 0 0 0 3px rgb(59 130 246 / 0.35);
+
+  --danger-700: #fca5a5;
 }
 
 *,
@@ -121,6 +158,9 @@ body {
   line-height: 1.5;
   color: var(--color-text);
   background-color: var(--color-bg);
+  transition:
+    background-color var(--transition-base),
+    color var(--transition-base);
 }
 
 button,
@@ -186,7 +226,7 @@ a:focus-visible {
   position: sticky;
   top: 0;
   z-index: 30;
-  background: rgb(255 255 255 / 0.85);
+  background: var(--color-topbar-bg);
   border-bottom: 1px solid var(--color-border);
   backdrop-filter: blur(8px);
 }
@@ -261,7 +301,7 @@ a:focus-visible {
   justify-content: center;
   padding: var(--space-6);
   background:
-    radial-gradient(ellipse 80% 50% at 50% -20%, var(--accent-100), transparent),
+    radial-gradient(ellipse 80% 50% at 50% -20%, var(--color-auth-glow), transparent),
     var(--color-bg);
 }
 
@@ -438,6 +478,20 @@ a:focus-visible {
 
 .btn-block {
   width: 100%;
+}
+
+.theme-toggle {
+  gap: var(--space-2);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.theme-toggle-label {
+  font-size: var(--font-size-sm);
 }
 
 /* ——— Alerts & feedback ——— */
