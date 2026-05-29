@@ -1,31 +1,38 @@
-<div class="login-page">
-  <form class="login-form" (submit)="onSubmit(); $event.preventDefault()" novalidate>
-    <h1>Login</h1>
+<div class="auth-page">
+  <div class="auth-card">
+    <header class="auth-brand">
+      <h1>Welcome back</h1>
+      <p>Sign in to manage users</p>
+    </header>
 
-    <label>
-      <span class="field-label">Login</span>
-      <input
-        type="text"
-        placeholder="Login"
-        autocomplete="username"
-        [formField]="loginForm.login"
-      />
-    </label>
+    <form class="auth-form" (submit)="onSubmit(); $event.preventDefault()" novalidate>
+      <label class="field">
+        <span class="field-label">Login</span>
+        <input
+          class="input"
+          type="text"
+          placeholder="admin"
+          autocomplete="username"
+          [formField]="loginForm.login"
+        />
+      </label>
 
-    <label>
-      <span class="field-label">Password</span>
-      <input
-        type="password"
-        placeholder="Password"
-        autocomplete="current-password"
-        [formField]="loginForm.password"
-      />
-    </label>
+      <label class="field">
+        <span class="field-label">Password</span>
+        <input
+          class="input"
+          type="password"
+          placeholder="••••••••"
+          autocomplete="current-password"
+          [formField]="loginForm.password"
+        />
+      </label>
 
-    @if (errorMessage(); as message) {
-      <p class="error-message" role="alert" aria-live="polite">{{ message }}</p>
-    }
+      @if (errorMessage(); as message) {
+        <p class="alert alert-error" role="alert" aria-live="polite">{{ message }}</p>
+      }
 
-    <button type="submit">Sign In</button>
-  </form>
+      <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+    </form>
+  </div>
 </div>

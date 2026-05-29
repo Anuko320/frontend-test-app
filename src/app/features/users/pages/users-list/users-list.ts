@@ -6,15 +6,12 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { form, FormField, required, submit } from '@angular/forms/signals';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { AuthService } from '../../../../core/services/auth';
 import { UsersService } from '../../services/users.service';
 
-const SEARCH_DEBOUNCE_MS = 300;
 const DELETE_MESSAGE_MS = 3000;
 
 @Component({
@@ -40,32 +37,15 @@ export class UsersList {
   readonly showAddUserPanel = signal(false);
   readonly deleteMessage = signal<string | null>(null);
 
-  readonly debouncedSearch = toSignal(
-    toObservable(this.searchInput).pipe(
-      debounceTime(SEARCH_DEBOUNCE_MS),
-      distinctUntilChanged(),
-    ),
-    { initialValue: '' },
-  );
-
-  readonly isSearchPending = computed(
-    () => this.searchInput().trim() !== this.debouncedSearch().trim(),
-  );
-
   readonly filteredUsers = computed(() => {
-    const query = this.debouncedSearch().trim().toLowerCase();
+    const query = this.searchInput().trim().toLowerCase();
     const list = this.users();
 
     if (!query) {
       return list;
     }
 
-    return list.filter(
-      (user) =>
-        user.name.toLowerCase().includes(query) ||
-        user.email.toLowerCase().includes(query) ||
-        user.phone.toLowerCase().includes(query),
-    );
+    return list.filter((user) => user.name.toLowerCase().includes(query));
   });
 
   readonly totalUsers = computed(() => this.users().length);
@@ -74,13 +54,13 @@ export class UsersList {
   readonly newUserModel = signal({
     name: '',
     email: '',
-    phone: '',
+    city: '',
   });
 
   readonly newUserForm = form(this.newUserModel, (schemaPath) => {
     required(schemaPath.name, { message: 'Name is required' });
     required(schemaPath.email, { message: 'Email is required' });
-    required(schemaPath.phone, { message: 'Phone is required' });
+    required(schemaPath.city, { message: 'City is required' });
   });
 
   readonly canAddUser = computed(() => this.newUserForm().valid());
@@ -122,9 +102,9 @@ export class UsersList {
       this.usersService.addUser({
         name: model.name,
         email: model.email,
-        phone: model.phone,
+        city: model.city,
       });
-      this.newUserModel.set({ name: '', email: '', phone: '' });
+      this.newUserModel.set({ name: '', email: '', city: '' });
       this.showAddUserPanel.set(false);
     });
   }

@@ -11,7 +11,9 @@ interface ApiUser {
   id: number;
   name: string;
   email: string;
-  phone: string;
+  address?: {
+    city: string;
+  };
 }
 
 @Injectable({
@@ -34,7 +36,6 @@ export class UsersService {
     this.fetchFromApi();
   }
 
-  /** Reload from API and replace local cache. */
   reloadFromApi(): void {
     localStorage.removeItem(USERS_STORAGE_KEY);
     this.users.set([]);
@@ -46,13 +47,12 @@ export class UsersService {
       id: Date.now(),
       name: input.name.trim(),
       email: input.email.trim(),
-      phone: input.phone.trim(),
+      city: input.city.trim(),
     };
     this.users.update((list) => [newUser, ...list]);
     this.persist();
   }
 
-  /** Removes user locally only; changes are saved to localStorage. */
   deleteUser(id: number): User | undefined {
     const removed = this.users().find((user) => user.id === id);
     this.users.update((list) => list.filter((user) => user.id !== id));
@@ -69,7 +69,7 @@ export class UsersService {
       .pipe(
         map((data) => data.map((u) => this.mapApiUser(u))),
         catchError(() => {
-          this.error.set('Failed to load users. Please try again.');
+          this.error.set('Не удалось загрузить пользователей. API недоступно.');
           return of<User[]>([]);
         }),
         finalize(() => this.loading.set(false)),
@@ -95,11 +95,21 @@ export class UsersService {
       if (!Array.isArray(parsed)) {
         return null;
       }
-      return parsed as User[];
+
+      return parsed.map((item) => this.normalizeUser(item as Record<string, unknown>));
     } catch {
       localStorage.removeItem(USERS_STORAGE_KEY);
       return null;
     }
+  }
+
+  private normalizeUser(raw: Record<string, unknown>): User {
+    return {
+      id: Number(raw['id']),
+      name: String(raw['name'] ?? ''),
+      email: String(raw['email'] ?? ''),
+      city: String(raw['city'] ?? raw['phone'] ?? ''),
+    };
   }
 
   private mapApiUser(apiUser: ApiUser): User {
@@ -107,7 +117,7 @@ export class UsersService {
       id: apiUser.id,
       name: apiUser.name,
       email: apiUser.email,
-      phone: apiUser.phone,
+      city: apiUser.address?.city ?? '',
     };
   }
 }

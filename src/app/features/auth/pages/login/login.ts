@@ -39,7 +39,7 @@ export class Login {
         return;
       }
 
-      this.errorMessage.set('Invalid credentials');
+      this.errorMessage.set('Неверный логин или пароль');
     });
   }
 }
