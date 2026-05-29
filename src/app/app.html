@@ -1,5 +1,23 @@
 <div class="theme-toggle-wrap">
   <app-theme-toggle />
+  <div class="lang-switcher" role="group" aria-label="Language selector">
+    <button
+      type="button"
+      class="btn btn-ghost"
+      [class.active]="currentLang() === 'en'"
+      (click)="switchLanguage('en')"
+    >
+      EN
+    </button>
+    <button
+      type="button"
+      class="btn btn-ghost"
+      [class.active]="currentLang() === 'ru'"
+      (click)="switchLanguage('ru')"
+    >
+      RU
+    </button>
+  </div>
 </div>
 
 <router-outlet />

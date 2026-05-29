@@ -1,0 +1,61 @@
+{
+  "AUTH": {
+    "WELCOME_BACK": "Welcome back",
+    "SIGN_IN_MANAGE": "Sign in to manage users",
+    "LOGIN_LABEL": "Login",
+    "PASSWORD_LABEL": "Password",
+    "LOGIN_PLACEHOLDER": "admin",
+    "PASSWORD_PLACEHOLDER": "••••••••",
+    "SIGN_IN": "Sign in",
+    "INVALID_CREDENTIALS": "Invalid username or password"
+  },
+  "USERS": {
+    "PAGE_TITLE": "Users",
+    "PAGE_SUBTITLE": "{{count}} users in directory",
+    "SEARCH_BY_NAME": "Search by name",
+    "SEARCH_PLACEHOLDER": "Enter name...",
+    "SEARCH_ARIA": "Search users by name",
+    "CLEAR": "Clear",
+    "SORT_BY_NAME": "Sort by name",
+    "SORT_ARIA": "Sort users by name",
+    "SORT_DEFAULT": "Default order",
+    "SORT_ASC": "A → Z",
+    "SORT_DESC": "Z → A",
+    "ADD_USER": "Add user",
+    "NEW_USER": "New user",
+    "NAME": "Name",
+    "NAME_PLACEHOLDER": "Name",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "Email",
+    "CITY": "City",
+    "CITY_PLACEHOLDER": "City",
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "RETRY": "Retry",
+    "USERS_LIST_ARIA": "Users list",
+    "ALL_USERS": "All users",
+    "SHOWN": "{{count}} shown",
+    "LOADING": "Loading users...",
+    "DELETE_CONFIRM": "Delete locally?",
+    "DELETE_CONFIRM_ARIA": "Confirm delete user",
+    "CONFIRM": "Confirm",
+    "DELETE_USER": "Delete user",
+    "EDIT": "Edit",
+    "SAVE_CHANGES": "Save changes",
+    "NOTHING_FOUND": "Nothing found",
+    "NO_USERS_FOUND": "No users found",
+    "LOGOUT": "Logout"
+  },
+  "VALIDATION": {
+    "LOGIN_REQUIRED": "Login is required",
+    "PASSWORD_REQUIRED": "Password is required",
+    "NAME_REQUIRED": "Name is required",
+    "NAME_MIN_LENGTH": "Name must be at least 3 characters",
+    "EMAIL_REQUIRED": "Email is required",
+    "EMAIL_VALID": "Enter a valid email",
+    "CITY_REQUIRED": "City is required"
+  },
+  "MESSAGES": {
+    "USER_DELETED": "{{name}} was removed locally"
+  }
+}

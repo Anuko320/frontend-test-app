@@ -1,38 +1,38 @@
 <div class="auth-page">
   <div class="auth-card">
     <header class="auth-brand">
-      <h1>Welcome back</h1>
-      <p>Sign in to manage users</p>
+      <h1>{{ 'AUTH.WELCOME_BACK' | translate }}</h1>
+      <p>{{ 'AUTH.SIGN_IN_MANAGE' | translate }}</p>
     </header>
 
     <form class="auth-form" (submit)="onSubmit(); $event.preventDefault()" novalidate>
       <label class="field">
-        <span class="field-label">Login</span>
+        <span class="field-label">{{ 'AUTH.LOGIN_LABEL' | translate }}</span>
         <input
           class="input"
           [class.input-invalid]="loginForm.login().invalid() && loginForm.login().touched()"
           type="text"
-          placeholder="admin"
+          placeholder="{{ 'AUTH.LOGIN_PLACEHOLDER' | translate }}"
           autocomplete="username"
           [formField]="loginForm.login"
         />
         @if (loginForm.login().touched() && loginForm.login().errors().length) {
-          <span class="field-error" role="alert">{{ loginForm.login().errors()[0].message }}</span>
+          <span class="field-error" role="alert">{{ loginForm.login().errors()[0].message | translate }}</span>
         }
       </label>
 
       <label class="field">
-        <span class="field-label">Password</span>
+        <span class="field-label">{{ 'AUTH.PASSWORD_LABEL' | translate }}</span>
         <input
           class="input"
           [class.input-invalid]="loginForm.password().invalid() && loginForm.password().touched()"
           type="password"
-          placeholder="••••••••"
+          placeholder="{{ 'AUTH.PASSWORD_PLACEHOLDER' | translate }}"
           autocomplete="current-password"
           [formField]="loginForm.password"
         />
         @if (loginForm.password().touched() && loginForm.password().errors().length) {
-          <span class="field-error" role="alert">{{ loginForm.password().errors()[0].message }}</span>
+          <span class="field-error" role="alert">{{ loginForm.password().errors()[0].message | translate }}</span>
         }
       </label>
 
@@ -40,7 +40,7 @@
         <p class="alert alert-error" role="alert" aria-live="polite">{{ message }}</p>
       }
 
-      <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+      <button type="submit" class="btn btn-primary btn-block">{{ 'AUTH.SIGN_IN' | translate }}</button>
     </form>
   </div>
 </div>

@@ -2,10 +2,14 @@
   <header class="app-topbar">
     <div class="app-topbar-inner page-container">
       <div>
-        <h1 class="page-title">Users</h1>
-        <p class="page-subtitle" aria-live="polite">{{ totalUsers() }} users in directory</p>
+        <h1 class="page-title">{{ 'USERS.PAGE_TITLE' | translate }}</h1>
+        <p class="page-subtitle" aria-live="polite">
+          {{ 'USERS.PAGE_SUBTITLE' | translate:{ count: totalUsers() } }}
+        </p>
       </div>
-      <button type="button" class="btn btn-secondary" (click)="logout()">Logout</button>
+      <button type="button" class="btn btn-secondary" (click)="logout()">
+        {{ 'USERS.LOGOUT' | translate }}
+      </button>
     </div>
   </header>
 
@@ -16,33 +20,35 @@
 
     <div class="controls-bar">
       <label class="field search-field">
-        <span class="field-label">Search by name</span>
+        <span class="field-label">{{ 'USERS.SEARCH_BY_NAME' | translate }}</span>
         <div class="search-row">
           <input
             class="input"
             type="search"
-            placeholder="Enter name..."
+            placeholder="{{ 'USERS.SEARCH_PLACEHOLDER' | translate }}"
             [value]="searchInput()"
             (input)="onSearchInput($event)"
-            aria-label="Search users by name"
+            aria-label="{{ 'USERS.SEARCH_ARIA' | translate }}"
           />
           @if (searchInput()) {
-            <button type="button" class="btn btn-ghost" (click)="clearSearch()">Clear</button>
+            <button type="button" class="btn btn-ghost" (click)="clearSearch()">
+              {{ 'USERS.CLEAR' | translate }}
+            </button>
           }
         </div>
       </label>
 
       <label class="field sort-field">
-        <span class="field-label">Sort by name</span>
+        <span class="field-label">{{ 'USERS.SORT_BY_NAME' | translate }}</span>
         <select
           class="input sort-select"
           [value]="nameSortOrder()"
           (change)="onSortChange($event)"
-          aria-label="Sort users by name"
+          aria-label="{{ 'USERS.SORT_ARIA' | translate }}"
         >
-          <option value="default">Default order</option>
-          <option value="asc">A → Z</option>
-          <option value="desc">Z → A</option>
+          <option value="default">{{ 'USERS.SORT_DEFAULT' | translate }}</option>
+          <option value="asc">{{ 'USERS.SORT_ASC' | translate }}</option>
+          <option value="desc">{{ 'USERS.SORT_DESC' | translate }}</option>
         </select>
       </label>
 
@@ -54,52 +60,58 @@
           [attr.aria-expanded]="showAddUserPanel()"
           aria-controls="add-user-panel"
         >
-          Add user
+          {{ 'USERS.ADD_USER' | translate }}
         </button>
 
         @if (showAddUserPanel()) {
           <div id="add-user-panel" class="panel add-user-panel panel-slide-in">
-            <p class="panel-title">New user</p>
+            <p class="panel-title">{{ 'USERS.NEW_USER' | translate }}</p>
             <form class="add-user-form" (submit)="addUser(); $event.preventDefault()">
               <label class="field">
-                <span class="field-label">Name</span>
+                <span class="field-label">{{ 'USERS.NAME' | translate }}</span>
                 <input
                   class="input"
                   [class.input-invalid]="newUserForm.name().invalid() && newUserForm.name().touched()"
                   type="text"
-                  placeholder="Name"
+                  placeholder="{{ 'USERS.NAME_PLACEHOLDER' | translate }}"
                   [formField]="newUserForm.name"
                 />
                 @if (newUserForm.name().touched() && newUserForm.name().errors().length) {
-                  <span class="field-error" role="alert">{{ newUserForm.name().errors()[0].message }}</span>
+                  <span class="field-error" role="alert">
+                    {{ newUserForm.name().errors()[0].message | translate }}
+                  </span>
                 }
               </label>
 
               <label class="field">
-                <span class="field-label">Email</span>
+                <span class="field-label">{{ 'USERS.EMAIL' | translate }}</span>
                 <input
                   class="input"
                   [class.input-invalid]="newUserForm.email().invalid() && newUserForm.email().touched()"
                   type="email"
-                  placeholder="Email"
+                  placeholder="{{ 'USERS.EMAIL_PLACEHOLDER' | translate }}"
                   [formField]="newUserForm.email"
                 />
                 @if (newUserForm.email().touched() && newUserForm.email().errors().length) {
-                  <span class="field-error" role="alert">{{ newUserForm.email().errors()[0].message }}</span>
+                  <span class="field-error" role="alert">
+                    {{ newUserForm.email().errors()[0].message | translate }}
+                  </span>
                 }
               </label>
 
               <label class="field">
-                <span class="field-label">City</span>
+                <span class="field-label">{{ 'USERS.CITY' | translate }}</span>
                 <input
                   class="input"
                   [class.input-invalid]="newUserForm.city().invalid() && newUserForm.city().touched()"
                   type="text"
-                  placeholder="City"
+                  placeholder="{{ 'USERS.CITY_PLACEHOLDER' | translate }}"
                   [formField]="newUserForm.city"
                 />
                 @if (newUserForm.city().touched() && newUserForm.city().errors().length) {
-                  <span class="field-error" role="alert">{{ newUserForm.city().errors()[0].message }}</span>
+                  <span class="field-error" role="alert">
+                    {{ newUserForm.city().errors()[0].message | translate }}
+                  </span>
                 }
               </label>
 
@@ -110,10 +122,10 @@
                   [disabled]="!canAddUser()"
                   [attr.aria-disabled]="!canAddUser()"
                 >
-                  Save
+                  {{ 'USERS.SAVE' | translate }}
                 </button>
                 <button type="button" class="btn btn-secondary" (click)="closeAddUserPanel()">
-                  Cancel
+                  {{ 'USERS.CANCEL' | translate }}
                 </button>
               </div>
             </form>
@@ -125,66 +137,145 @@
     @if (error(); as errorMessage) {
       <div class="error-block" role="alert" aria-live="polite">
         <p class="alert alert-error">{{ errorMessage }}</p>
-        <button type="button" class="btn btn-secondary" (click)="retryLoad()">Retry</button>
+        <button type="button" class="btn btn-secondary" (click)="retryLoad()">
+          {{ 'USERS.RETRY' | translate }}
+        </button>
       </div>
     }
 
-    <section class="content-panel" aria-label="Users list">
+    <section class="content-panel" aria-label="{{ 'USERS.USERS_LIST_ARIA' | translate }}">
       <div class="content-panel-header">
-        <h2>All users</h2>
+        <h2>{{ 'USERS.ALL_USERS' | translate }}</h2>
         @if (!loading()) {
-          <span class="badge">{{ visibleUsers() }} shown</span>
+          <span class="badge">{{ 'USERS.SHOWN' | translate:{ count: visibleUsers() } }}</span>
         }
       </div>
 
       @if (loading()) {
         <div class="loader" role="status" aria-live="polite" aria-busy="true">
           <div class="loader-spinner" aria-hidden="true"></div>
-          <p class="loader-text">Loading users...</p>
+          <p class="loader-text">{{ 'USERS.LOADING' | translate }}</p>
         </div>
       } @else {
         <div class="users-panel-body">
           @for (user of displayedUsers(); track user.id) {
             <article class="user-row">
-              <div class="user-row-main">
-                <div class="user-avatar" aria-hidden="true">{{ user.name.charAt(0) }}</div>
-                <div class="user-info">
-                  <h3 class="user-name">{{ user.name }}</h3>
-                  <p class="user-meta">{{ user.email }}</p>
-                  <p class="user-meta">{{ user.city }}</p>
-                </div>
-              </div>
+              @if (editingUserId() === user.id) {
+                <div class="user-row-main user-row-edit">
+                  <div class="user-avatar" aria-hidden="true">{{ user.name.charAt(0) }}</div>
+                  <div class="user-edit-fields">
+                    <label class="field">
+                      <span class="field-label">{{ 'USERS.NAME' | translate }}</span>
+                      <input
+                        class="input"
+                        [class.input-invalid]="editingUserForm.name().invalid() && editingUserForm.name().touched()"
+                        type="text"
+                        placeholder="{{ 'USERS.NAME_PLACEHOLDER' | translate }}"
+                        [formField]="editingUserForm.name"
+                      />
+                      @if (editingUserForm.name().touched() && editingUserForm.name().errors().length) {
+                        <span class="field-error" role="alert">
+                          {{ editingUserForm.name().errors()[0].message | translate }}
+                        </span>
+                      }
+                    </label>
 
-              <div class="user-row-actions">
-                @if (pendingDeleteId() === user.id) {
-                  <div
-                    class="delete-confirm"
-                    role="group"
-                    [attr.aria-label]="'Confirm delete ' + user.name"
-                  >
-                    <p>Удалить локально?</p>
+                    <label class="field">
+                      <span class="field-label">{{ 'USERS.EMAIL' | translate }}</span>
+                      <input
+                        class="input"
+                        [class.input-invalid]="editingUserForm.email().invalid() && editingUserForm.email().touched()"
+                        type="email"
+                        placeholder="{{ 'USERS.EMAIL_PLACEHOLDER' | translate }}"
+                        [formField]="editingUserForm.email"
+                      />
+                      @if (editingUserForm.email().touched() && editingUserForm.email().errors().length) {
+                        <span class="field-error" role="alert">
+                          {{ editingUserForm.email().errors()[0].message | translate }}
+                        </span>
+                      }
+                    </label>
+
+                    <label class="field">
+                      <span class="field-label">{{ 'USERS.CITY' | translate }}</span>
+                      <input
+                        class="input"
+                        [class.input-invalid]="editingUserForm.city().invalid() && editingUserForm.city().touched()"
+                        type="text"
+                        placeholder="{{ 'USERS.CITY_PLACEHOLDER' | translate }}"
+                        [formField]="editingUserForm.city"
+                      />
+                      @if (editingUserForm.city().touched() && editingUserForm.city().errors().length) {
+                        <span class="field-error" role="alert">
+                          {{ editingUserForm.city().errors()[0].message | translate }}
+                        </span>
+                      }
+                    </label>
+                  </div>
+                </div>
+
+                <div class="user-row-actions">
+                  <div class="form-actions">
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      [disabled]="!canSaveEdit()"
+                      [attr.aria-disabled]="!canSaveEdit()"
+                      (click)="saveEdit()"
+                    >
+                      {{ 'USERS.SAVE_CHANGES' | translate }}
+                    </button>
+                    <button type="button" class="btn btn-secondary" (click)="cancelEdit()">
+                      {{ 'USERS.CANCEL' | translate }}
+                    </button>
+                  </div>
+                </div>
+              } @else {
+                <div class="user-row-main">
+                  <div class="user-avatar" aria-hidden="true">{{ user.name.charAt(0) }}</div>
+                  <div class="user-info">
+                    <h3 class="user-name">{{ user.name }}</h3>
+                    <p class="user-meta">{{ user.email }}</p>
+                    <p class="user-meta">{{ user.city }}</p>
+                  </div>
+                </div>
+
+                <div class="user-row-actions">
+                  @if (pendingDeleteId() === user.id) {
+                    <div
+                      class="delete-confirm"
+                      role="group"
+                      [attr.aria-label]="'USERS.DELETE_CONFIRM_ARIA' | translate"
+                    >
+                      <p>{{ 'USERS.DELETE_CONFIRM' | translate }}</p>
+                      <div class="form-actions">
+                        <button type="button" class="btn btn-danger-solid" (click)="confirmDelete()">
+                          {{ 'USERS.CONFIRM' | translate }}
+                        </button>
+                        <button type="button" class="btn btn-secondary" (click)="cancelDelete()">
+                          {{ 'USERS.CANCEL' | translate }}
+                        </button>
+                      </div>
+                    </div>
+                  } @else {
                     <div class="form-actions">
-                      <button type="button" class="btn btn-danger-solid" (click)="confirmDelete()">
-                        Подтвердить
+                      <button type="button" class="btn btn-secondary" (click)="startEdit(user)">
+                        {{ 'USERS.EDIT' | translate }}
                       </button>
-                      <button type="button" class="btn btn-secondary" (click)="cancelDelete()">
-                        Отмена
+                      <button type="button" class="btn btn-danger" (click)="requestDelete(user.id)">
+                        {{ 'USERS.DELETE_USER' | translate }}
                       </button>
                     </div>
-                  </div>
-                } @else {
-                  <button type="button" class="btn btn-danger" (click)="requestDelete(user.id)">
-                    Удалить пользователя
-                  </button>
-                }
-              </div>
+                  }
+                </div>
+              }
             </article>
           } @empty {
             <p class="status-text empty-state">
               @if (searchInput().trim()) {
-                Nothing found
+                {{ 'USERS.NOTHING_FOUND' | translate }}
               } @else {
-                No users found
+                {{ 'USERS.NO_USERS_FOUND' | translate }}
               }
             </p>
           }

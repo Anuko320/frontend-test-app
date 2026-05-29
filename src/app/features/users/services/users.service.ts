@@ -60,6 +60,11 @@ export class UsersService {
     return removed;
   }
 
+  updateUser(updated: User): void {
+    this.users.update((list) => list.map((user) => (user.id === updated.id ? updated : user)));
+    this.persist();
+  }
+
   private fetchFromApi(): void {
     this.loading.set(true);
     this.error.set(null);

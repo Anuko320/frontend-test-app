@@ -1,0 +1,61 @@
+{
+  "AUTH": {
+    "WELCOME_BACK": "С возвращением",
+    "SIGN_IN_MANAGE": "Войдите, чтобы управлять пользователями",
+    "LOGIN_LABEL": "Логин",
+    "PASSWORD_LABEL": "Пароль",
+    "LOGIN_PLACEHOLDER": "admin",
+    "PASSWORD_PLACEHOLDER": "••••••••",
+    "SIGN_IN": "Войти",
+    "INVALID_CREDENTIALS": "Неверный логин или пароль"
+  },
+  "USERS": {
+    "PAGE_TITLE": "Пользователи",
+    "PAGE_SUBTITLE": "{{count}} пользователей в каталоге",
+    "SEARCH_BY_NAME": "Поиск по имени",
+    "SEARCH_PLACEHOLDER": "Введите имя...",
+    "SEARCH_ARIA": "Поиск пользователей по имени",
+    "CLEAR": "Очистить",
+    "SORT_BY_NAME": "Сортировка по имени",
+    "SORT_ARIA": "Сортировать пользователей по имени",
+    "SORT_DEFAULT": "По умолчанию",
+    "SORT_ASC": "A → Z",
+    "SORT_DESC": "Z → A",
+    "ADD_USER": "Добавить пользователя",
+    "NEW_USER": "Новый пользователь",
+    "NAME": "Имя",
+    "NAME_PLACEHOLDER": "Имя",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "Email",
+    "CITY": "Город",
+    "CITY_PLACEHOLDER": "Город",
+    "SAVE": "Сохранить",
+    "CANCEL": "Отмена",
+    "RETRY": "Повторить",
+    "USERS_LIST_ARIA": "Список пользователей",
+    "ALL_USERS": "Все пользователи",
+    "SHOWN": "Показано {{count}}",
+    "LOADING": "Загрузка пользователей...",
+    "DELETE_CONFIRM": "Удалить локально?",
+    "DELETE_CONFIRM_ARIA": "Подтвердите удаление пользователя",
+    "CONFIRM": "Подтвердить",
+    "DELETE_USER": "Удалить пользователя",
+    "EDIT": "Редактировать",
+    "SAVE_CHANGES": "Сохранить изменения",
+    "NOTHING_FOUND": "Ничего не найдено",
+    "NO_USERS_FOUND": "Пользователи не найдены",
+    "LOGOUT": "Выйти"
+  },
+  "VALIDATION": {
+    "LOGIN_REQUIRED": "Введите логин",
+    "PASSWORD_REQUIRED": "Введите пароль",
+    "NAME_REQUIRED": "Имя обязательно",
+    "NAME_MIN_LENGTH": "Имя должно быть не короче 3 символов",
+    "EMAIL_REQUIRED": "Email обязателен",
+    "EMAIL_VALID": "Введите корректный email",
+    "CITY_REQUIRED": "Город обязателен"
+  },
+  "MESSAGES": {
+    "USER_DELETED": "{{name}} удалён локально"
+  }
+}
