@@ -4,7 +4,7 @@ import { catchError, finalize, map, of } from 'rxjs';
 
 import { User } from '../../../core/models/user';
 
-const STORAGE_KEY = 'users';
+export const USERS_STORAGE_KEY = 'users';
 const API_URL = 'https://jsonplaceholder.typicode.com/users';
 
 interface ApiUser {
@@ -26,11 +26,41 @@ export class UsersService {
 
   init(): void {
     const stored = this.loadFromStorage();
-    if (stored) {
+    if (stored !== null) {
       this.users.set(stored);
       return;
     }
 
+    this.fetchFromApi();
+  }
+
+  /** Reload from API and replace local cache. */
+  reloadFromApi(): void {
+    localStorage.removeItem(USERS_STORAGE_KEY);
+    this.users.set([]);
+    this.fetchFromApi();
+  }
+
+  addUser(input: Omit<User, 'id'>): void {
+    const newUser: User = {
+      id: Date.now(),
+      name: input.name.trim(),
+      email: input.email.trim(),
+      phone: input.phone.trim(),
+    };
+    this.users.update((list) => [newUser, ...list]);
+    this.persist();
+  }
+
+  /** Removes user locally only; changes are saved to localStorage. */
+  deleteUser(id: number): User | undefined {
+    const removed = this.users().find((user) => user.id === id);
+    this.users.update((list) => list.filter((user) => user.id !== id));
+    this.persist();
+    return removed;
+  }
+
+  private fetchFromApi(): void {
     this.loading.set(true);
     this.error.set(null);
 
@@ -46,41 +76,28 @@ export class UsersService {
       )
       .subscribe((users) => {
         this.users.set(users);
-        if (users.length > 0) {
-          this.persist();
-        }
+        this.persist();
       });
   }
 
-  addUser(input: Omit<User, 'id'>): void {
-    const newUser: User = {
-      id: Date.now(),
-      name: input.name.trim(),
-      email: input.email.trim(),
-      phone: input.phone.trim(),
-    };
-    this.users.update((list) => [newUser, ...list]);
-    this.persist();
-  }
-
-  deleteUser(id: number): void {
-    this.users.update((list) => list.filter((user) => user.id !== id));
-    this.persist();
-  }
-
   private persist(): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.users()));
+    localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(this.users()));
   }
 
   private loadFromStorage(): User[] | null {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(USERS_STORAGE_KEY);
     if (!raw) {
       return null;
     }
 
     try {
-      return JSON.parse(raw) as User[];
+      const parsed: unknown = JSON.parse(raw);
+      if (!Array.isArray(parsed)) {
+        return null;
+      }
+      return parsed as User[];
     } catch {
+      localStorage.removeItem(USERS_STORAGE_KEY);
       return null;
     }
   }

@@ -6,16 +6,33 @@
 
 .users-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 1.5rem;
+}
 
+.users-header-title {
   h1 {
     margin: 0;
     font-size: 1.75rem;
     color: var(--color-text);
   }
+}
+
+.users-count {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.success-message {
+  margin: 0 0 1rem;
+  padding: 0.75rem;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius);
 }
 
 .btn {
@@ -83,10 +100,17 @@
 .search-field {
   display: block;
   margin-bottom: 1.5rem;
+}
+
+.search-input-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  max-width: 420px;
 
   input {
-    width: 100%;
-    max-width: 320px;
+    flex: 1;
+    min-width: 0;
     padding: 0.625rem 0.75rem;
     border: 1px solid var(--color-border-strong);
     border-radius: var(--radius);
@@ -98,6 +122,19 @@
       border-color: var(--color-focus);
     }
   }
+}
+
+.search-clear {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.error-block {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .add-user-section {

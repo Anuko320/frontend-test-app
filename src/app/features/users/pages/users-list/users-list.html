@@ -1,19 +1,41 @@
 <div class="users-page">
   <header class="users-header">
-    <h1>Users</h1>
+    <div class="users-header-title">
+      <h1>Users</h1>
+      <p class="users-count" aria-live="polite">
+        @if (isSearchPending()) {
+          Searching...
+        } @else {
+          Showing {{ visibleUsers() }} of {{ totalUsers() }}
+        }
+      </p>
+    </div>
     <button type="button" class="btn btn-secondary" (click)="logout()">Logout</button>
   </header>
 
-  <label class="search-field">
-    <span class="field-label">Search users</span>
-    <input
-      type="search"
-      placeholder="Search users..."
-      [value]="search()"
-      (input)="onSearchInput($event)"
-      aria-label="Search users"
-    />
-  </label>
+  @if (deleteMessage(); as message) {
+    <p class="success-message" role="status" aria-live="polite">{{ message }}</p>
+  }
+
+  <div class="search-field">
+    <label>
+      <span class="field-label">Search users</span>
+      <div class="search-input-row">
+        <input
+          type="search"
+          placeholder="Name, email or phone..."
+          [value]="searchInput()"
+          (input)="onSearchInput($event)"
+          aria-label="Search users"
+        />
+        @if (searchInput()) {
+          <button type="button" class="btn btn-secondary search-clear" (click)="clearSearch()">
+            Clear
+          </button>
+        }
+      </div>
+    </label>
+  </div>
 
   <section class="add-user-section">
     <button
@@ -67,7 +89,10 @@
   }
 
   @if (error(); as errorMessage) {
-    <p class="error-message" role="alert" aria-live="polite">{{ errorMessage }}</p>
+    <div class="error-block" role="alert" aria-live="polite">
+      <p class="error-message">{{ errorMessage }}</p>
+      <button type="button" class="btn btn-secondary" (click)="retryLoad()">Retry</button>
+    </div>
   }
 
   <section class="users-list" aria-label="Users list">
@@ -79,21 +104,35 @@
 
         @if (pendingDeleteId() === user.id) {
           <div class="delete-confirm" role="group" [attr.aria-label]="'Confirm delete ' + user.name">
-            <p>Delete this user?</p>
+            <p>Удалить пользователя локально? Данные сохранятся в браузере.</p>
             <div class="delete-confirm-actions">
-              <button type="button" class="btn btn-danger" (click)="confirmDelete()">Confirm</button>
-              <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+              <button type="button" class="btn btn-danger" (click)="confirmDelete()">
+                Подтвердить
+              </button>
+              <button type="button" class="btn btn-secondary" (click)="cancelDelete()">
+                Отмена
+              </button>
             </div>
           </div>
         } @else {
-          <button type="button" class="btn btn-danger delete-btn" (click)="requestDelete(user.id)">
-            Delete
+          <button
+            type="button"
+            class="btn btn-danger delete-btn"
+            (click)="requestDelete(user.id)"
+          >
+            Удалить пользователя
           </button>
         }
       </article>
     } @empty {
       @if (!loading()) {
-        <p class="empty-state">No users found</p>
+        <p class="empty-state">
+          @if (debouncedSearch()) {
+            No users match your search
+          } @else {
+            No users found
+          }
+        </p>
       }
     }
   </section>
