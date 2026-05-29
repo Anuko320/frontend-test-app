@@ -162,19 +162,19 @@
                     role="group"
                     [attr.aria-label]="'Confirm delete ' + user.name"
                   >
-                    <p>Удалить локально?</p>
+                    <p>Delete locally</p>
                     <div class="form-actions">
                       <button type="button" class="btn btn-danger-solid" (click)="confirmDelete()">
-                        Подтвердить
+                        Yes, delete
                       </button>
                       <button type="button" class="btn btn-secondary" (click)="cancelDelete()">
-                        Отмена
+                        Cancel
                       </button>
                     </div>
                   </div>
                 } @else {
                   <button type="button" class="btn btn-danger" (click)="requestDelete(user.id)">
-                    Удалить пользователя
+                    Delete account
                   </button>
                 }
               </div>
