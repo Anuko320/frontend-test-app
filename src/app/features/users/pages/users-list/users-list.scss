@@ -183,6 +183,10 @@
   }
 
   .add-user-panel {
+    width: 420px;
+  }
+
+  .add-user-panel {
     left: 0;
     right: 0;
     width: 100%;
@@ -208,5 +212,69 @@
     .form-actions .btn {
       flex: 1;
     }
+  }
+
+  .sort-select-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 180px;
+    cursor: pointer;
+  }
+
+  .sort-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  
+    min-width: 180px;
+    padding: 8px;
+  
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.08);
+  
+    background: #172033;
+  
+    box-shadow:
+      0 10px 30px rgba(0,0,0,.35);
+  }
+
+  .sort-option {
+    border: none;
+    background: transparent;
+  
+    color: white;
+  
+    padding: 10px 12px;
+    border-radius: 10px;
+  
+    text-align: left;
+    cursor: pointer;
+  
+    transition: .2s;
+  }
+  
+  .sort-option:hover {
+    background: rgba(255,255,255,.06);
+  }
+
+  .sort-select-btn {
+    min-width: 220px;
+  
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  
+    cursor: pointer;
+  }
+
+  .cdk-overlay-pane .sort-dropdown {
+    background: #1f2937;
+    border-radius: 16px;
+    padding: 8px;
+  }
+
+  .cdk-overlay-pane .sort-option {
+    color: white;
   }
 }

@@ -80,6 +80,23 @@ export class UsersService {
       });
   }
 
+  updateUser(updatedUser: User): void {
+    this.users.update((list) =>
+      list.map((user) =>
+        user.id === updatedUser.id
+          ? {
+              ...user,
+              name: updatedUser.name.trim(),
+              email: updatedUser.email.trim(),
+              city: updatedUser.city.trim(),
+            }
+          : user,
+      ),
+    );
+  
+    this.persist();
+  }
+
   private persist(): void {
     localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(this.users()));
   }

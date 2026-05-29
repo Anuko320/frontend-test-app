@@ -46,39 +46,104 @@
         </div>
       </label>
 
-      <label class="field sort-field">
-        <span class="field-label">{{ languageService.language() === 'en'
-          ? 'Sort by A-Z'
-          : 'Сортировка по A-Z'
-        }}</span>
-        <select
-          class="input sort-select"
-          [value]="nameSortOrder()"
-          (change)="onSortChange($event)"
-          aria-label="Sort users by name"
-        >
-          <option value="default">{{ languageService.language() === 'en'
+      <div class="sort-field">
+  <span class="field-label">
+    {{
+      languageService.language() === 'en'
+        ? 'Sort by A-Z'
+        : 'Сортировка по A-Z'
+    }}
+  </span>
+
+  <button
+    cdkOverlayOrigin
+    #sortTrigger="cdkOverlayOrigin"
+    type="button"
+    class="input sort-select-btn"
+    (click)="showSortDropdown.set(!showSortDropdown())"
+  >
+    @if (nameSortOrder() === 'asc') {
+      <span>A → Z</span>
+    } @else if (nameSortOrder() === 'desc') {
+      <span>Z → A</span>
+    } @else {
+      <span>
+        {{
+          languageService.language() === 'en'
             ? 'Sort'
-            : 'Сортировка '
-          }}</option>
-          <option value="asc">A → Z</option>
-          <option value="desc">Z → A</option>
-        </select>
-      </label>
+            : 'Сортировка'
+        }}
+      </span>
+    }
+  </button>
+
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="sortTrigger"
+    [cdkConnectedOverlayOpen]="showSortDropdown()"
+    [cdkConnectedOverlayHasBackdrop]="true"
+    (backdropClick)="showSortDropdown.set(false)"
+    [cdkConnectedOverlayPositions]="[
+      {
+        originX: 'start',
+        originY: 'bottom',
+        overlayX: 'start',
+        overlayY: 'top',
+        offsetY: 8
+      }
+    ]"
+  >
+    <div class="sort-dropdown">
+      <button
+        type="button"
+        class="sort-dropdown"
+        (click)="nameSortOrder.set('asc'); showSortDropdown.set(false)"
+      >
+        A → Z
+      </button>
+
+      <button
+        type="button"
+        class="sort-dropdown"
+        (click)="nameSortOrder.set('desc'); showSortDropdown.set(false)"
+      >
+        Z → A
+      </button>
+    </div>
+  </ng-template>
+</div>
 
       <div class="add-user-wrap">
         <button
+          cdkOverlayOrigin
+          #addUserTrigger="cdkOverlayOrigin"
           type="button"
           class="btn btn-primary"
           (click)="toggleAddUserPanel()"
-          [attr.aria-expanded]="showAddUserPanel()"
-          aria-controls="add-user-panel"
         >
-        {{ languageService.language() === 'en'
-        ? 'Add user'
-        : 'Добавить пользователя'
-      }}
+          {{
+            languageService.language() === 'en'
+              ? 'Add user'
+              : 'Добавить пользователя'
+          }}
         </button>
+      
+        <ng-template
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="addUserTrigger"
+        [cdkConnectedOverlayOpen]="showAddUserPanel()"
+        [cdkConnectedOverlayHasBackdrop]="true"
+        (backdropClick)="closeAddUserPanel()"
+        [cdkConnectedOverlayPositions]="[
+          {
+            originX: 'start',
+            originY: 'bottom',
+            overlayX: 'start',
+            overlayY: 'top',
+            offsetY: 12
+          }
+        ]"
+      >
 
         @if (showAddUserPanel()) {
           <div id="add-user-panel" class="panel add-user-panel panel-slide-in">
@@ -169,7 +234,8 @@
             </form>
           </div>
         }
-      </div>
+      </ng-template>
+    </div>
     </div>
 
     @if (error(); as errorMessage) {

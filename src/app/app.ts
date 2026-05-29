@@ -20,7 +20,7 @@ export class App {
     inject(ThemeService);
   }
   logout(): void {
-    localStorage.clear();
+    localStorage.removeItem('token');
     location.reload();
   }
 }

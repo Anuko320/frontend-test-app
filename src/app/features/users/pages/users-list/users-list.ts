@@ -6,6 +6,10 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import {
+  CdkConnectedOverlay,
+  CdkOverlayOrigin,
+} from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 import { form, FormField, email, minLength, required, submit } from '@angular/forms/signals';
 
@@ -20,7 +24,11 @@ export type NameSortOrder = 'default' | 'asc' | 'desc';
 
 @Component({
   selector: 'app-users-list',
-  imports: [FormField],
+  imports: [
+    FormField,
+    CdkOverlayOrigin,
+    CdkConnectedOverlay,
+  ],
   templateUrl: './users-list.html',
   styleUrl: './users-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,8 +49,12 @@ export class UsersList {
   readonly searchInput = signal('');
   readonly nameSortOrder = signal<NameSortOrder>('default');
   readonly pendingDeleteId = signal<number | null>(null);
+
   readonly showAddUserPanel = signal(false);
+  readonly showSortDropdown = signal(false);
+
   readonly editingUserId = signal<number | null>(null);
+
   readonly deleteMessage = signal<string | null>(null);
 
   readonly filteredUsers = computed(() => {
@@ -133,12 +145,31 @@ export class UsersList {
   addUser(): void {
     submit(this.newUserForm, async () => {
       const model = this.newUserModel();
-      this.usersService.addUser({
-        name: model.name,
-        email: model.email,
-        city: model.city,
+      const editingId = this.editingUserId();
+  
+      if (editingId !== null) {
+        this.usersService.updateUser({
+          id: editingId,
+          name: model.name,
+          email: model.email,
+          city: model.city,
+        });
+  
+        this.editingUserId.set(null);
+      } else {
+        this.usersService.addUser({
+          name: model.name,
+          email: model.email,
+          city: model.city,
+        });
+      }
+  
+      this.newUserModel.set({
+        name: '',
+        email: '',
+        city: '',
       });
-      this.newUserModel.set({ name: '', email: '', city: '' });
+  
       this.showAddUserPanel.set(false);
     });
   }
