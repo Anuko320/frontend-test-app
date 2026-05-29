@@ -38,6 +38,7 @@ export class UsersList {
   readonly nameSortOrder = signal<NameSortOrder>('default');
   readonly pendingDeleteId = signal<number | null>(null);
   readonly showAddUserPanel = signal(false);
+  readonly editingUserId = signal<number | null>(null);
   readonly deleteMessage = signal<string | null>(null);
 
   readonly filteredUsers = computed(() => {
@@ -140,6 +141,23 @@ export class UsersList {
 
   requestDelete(id: number): void {
     this.pendingDeleteId.set(id);
+  }
+
+  openEditUser(user: {
+    id: number;
+    name: string;
+    email: string;
+    city: string;
+  }): void {
+    this.editingUserId.set(user.id);
+  
+    this.newUserModel.set({
+      name: user.name,
+      email: user.email,
+      city: user.city,
+    });
+  
+    this.showAddUserPanel.set(true);
   }
 
   cancelDelete(): void {
