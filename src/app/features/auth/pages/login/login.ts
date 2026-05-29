@@ -23,8 +23,8 @@ export class Login {
   });
 
   readonly loginForm = form(this.loginModel, (schemaPath) => {
-    required(schemaPath.login, { message: 'Login is required' });
-    required(schemaPath.password, { message: 'Password is required' });
+    required(schemaPath.login, { message: 'Введите логин' });
+    required(schemaPath.password, { message: 'Введите пароль' });
   });
 
   onSubmit(): void {

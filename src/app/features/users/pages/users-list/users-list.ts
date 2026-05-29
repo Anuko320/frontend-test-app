@@ -7,12 +7,14 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { form, FormField, required, submit } from '@angular/forms/signals';
+import { form, FormField, email, minLength, required, submit } from '@angular/forms/signals';
 
 import { AuthService } from '../../../../core/services/auth';
 import { UsersService } from '../../services/users.service';
 
 const DELETE_MESSAGE_MS = 3000;
+
+export type NameSortOrder = 'default' | 'asc' | 'desc';
 
 @Component({
   selector: 'app-users-list',
@@ -33,6 +35,7 @@ export class UsersList {
   readonly error = this.usersService.error;
 
   readonly searchInput = signal('');
+  readonly nameSortOrder = signal<NameSortOrder>('default');
   readonly pendingDeleteId = signal<number | null>(null);
   readonly showAddUserPanel = signal(false);
   readonly deleteMessage = signal<string | null>(null);
@@ -48,8 +51,27 @@ export class UsersList {
     return list.filter((user) => user.name.toLowerCase().includes(query));
   });
 
+  readonly displayedUsers = computed(() => {
+    const list = [...this.filteredUsers()];
+    const order = this.nameSortOrder();
+
+    if (order === 'asc') {
+      return list.sort((a, b) =>
+        a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }),
+      );
+    }
+
+    if (order === 'desc') {
+      return list.sort((a, b) =>
+        b.name.localeCompare(a.name, undefined, { sensitivity: 'base' }),
+      );
+    }
+
+    return list;
+  });
+
   readonly totalUsers = computed(() => this.users().length);
-  readonly visibleUsers = computed(() => this.filteredUsers().length);
+  readonly visibleUsers = computed(() => this.displayedUsers().length);
 
   readonly newUserModel = signal({
     name: '',
@@ -58,9 +80,11 @@ export class UsersList {
   });
 
   readonly newUserForm = form(this.newUserModel, (schemaPath) => {
-    required(schemaPath.name, { message: 'Name is required' });
-    required(schemaPath.email, { message: 'Email is required' });
-    required(schemaPath.city, { message: 'City is required' });
+    required(schemaPath.name, { message: 'Имя обязательно' });
+    minLength(schemaPath.name, 3, { message: 'Имя должно быть не короче 3 символов' });
+    required(schemaPath.email, { message: 'Email обязателен' });
+    email(schemaPath.email, { message: 'Введите корректный email' });
+    required(schemaPath.city, { message: 'Город обязателен' });
   });
 
   readonly canAddUser = computed(() => this.newUserForm().valid());
@@ -82,6 +106,11 @@ export class UsersList {
 
   clearSearch(): void {
     this.searchInput.set('');
+  }
+
+  onSortChange(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value as NameSortOrder;
+    this.nameSortOrder.set(value);
   }
 
   retryLoad(): void {

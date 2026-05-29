@@ -83,6 +83,47 @@ describe('UsersList', () => {
     expect(emptyEl?.textContent).toContain('Nothing found');
   });
 
+  it('should sort users alphabetically A to Z', () => {
+    usersSignal.set([
+      { id: 1, name: 'Charlie', email: 'c@test.com', city: 'Berlin' },
+      { id: 2, name: 'Alice', email: 'a@test.com', city: 'London' },
+      { id: 3, name: 'Bob', email: 'b@test.com', city: 'Paris' },
+    ]);
+    component.nameSortOrder.set('asc');
+    fixture.detectChanges();
+
+    const names = component.displayedUsers().map((u) => u.name);
+    expect(names).toEqual(['Alice', 'Bob', 'Charlie']);
+  });
+
+  it('should sort users alphabetically Z to A', () => {
+    usersSignal.set([
+      { id: 1, name: 'Charlie', email: 'c@test.com', city: 'Berlin' },
+      { id: 2, name: 'Alice', email: 'a@test.com', city: 'London' },
+    ]);
+    component.nameSortOrder.set('desc');
+    fixture.detectChanges();
+
+    const names = component.displayedUsers().map((u) => u.name);
+    expect(names).toEqual(['Charlie', 'Alice']);
+  });
+
+  it('should invalidate short name in add user form', () => {
+    component.newUserModel.set({ name: 'Ab', email: 'test@test.com', city: 'Berlin' });
+    fixture.detectChanges();
+
+    expect(component.newUserForm().invalid()).toBe(true);
+    expect(component.canAddUser()).toBe(false);
+  });
+
+  it('should invalidate incorrect email in add user form', () => {
+    component.newUserModel.set({ name: 'Alice', email: 'not-an-email', city: 'Berlin' });
+    fixture.detectChanges();
+
+    expect(component.newUserForm().invalid()).toBe(true);
+    expect(component.canAddUser()).toBe(false);
+  });
+
   it('should delete user locally via service', () => {
     component.requestDelete(1);
     component.confirmDelete();

@@ -8,6 +8,15 @@
   min-width: min(100%, 20rem);
 }
 
+.sort-field {
+  flex-shrink: 0;
+  min-width: 10rem;
+}
+
+.sort-select {
+  cursor: pointer;
+}
+
 .search-row {
   display: flex;
   gap: var(--space-2);

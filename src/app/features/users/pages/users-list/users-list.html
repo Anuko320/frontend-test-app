@@ -32,6 +32,20 @@
         </div>
       </label>
 
+      <label class="field sort-field">
+        <span class="field-label">Sort by name</span>
+        <select
+          class="input sort-select"
+          [value]="nameSortOrder()"
+          (change)="onSortChange($event)"
+          aria-label="Sort users by name"
+        >
+          <option value="default">Default order</option>
+          <option value="asc">A → Z</option>
+          <option value="desc">Z → A</option>
+        </select>
+      </label>
+
       <div class="add-user-wrap">
         <button
           type="button"
@@ -49,17 +63,44 @@
             <form class="add-user-form" (submit)="addUser(); $event.preventDefault()">
               <label class="field">
                 <span class="field-label">Name</span>
-                <input class="input" type="text" placeholder="Name" [formField]="newUserForm.name" />
+                <input
+                  class="input"
+                  [class.input-invalid]="newUserForm.name().invalid() && newUserForm.name().touched()"
+                  type="text"
+                  placeholder="Name"
+                  [formField]="newUserForm.name"
+                />
+                @if (newUserForm.name().touched() && newUserForm.name().errors().length) {
+                  <span class="field-error" role="alert">{{ newUserForm.name().errors()[0].message }}</span>
+                }
               </label>
 
               <label class="field">
                 <span class="field-label">Email</span>
-                <input class="input" type="email" placeholder="Email" [formField]="newUserForm.email" />
+                <input
+                  class="input"
+                  [class.input-invalid]="newUserForm.email().invalid() && newUserForm.email().touched()"
+                  type="email"
+                  placeholder="Email"
+                  [formField]="newUserForm.email"
+                />
+                @if (newUserForm.email().touched() && newUserForm.email().errors().length) {
+                  <span class="field-error" role="alert">{{ newUserForm.email().errors()[0].message }}</span>
+                }
               </label>
 
               <label class="field">
                 <span class="field-label">City</span>
-                <input class="input" type="text" placeholder="City" [formField]="newUserForm.city" />
+                <input
+                  class="input"
+                  [class.input-invalid]="newUserForm.city().invalid() && newUserForm.city().touched()"
+                  type="text"
+                  placeholder="City"
+                  [formField]="newUserForm.city"
+                />
+                @if (newUserForm.city().touched() && newUserForm.city().errors().length) {
+                  <span class="field-error" role="alert">{{ newUserForm.city().errors()[0].message }}</span>
+                }
               </label>
 
               <div class="form-actions">
@@ -103,7 +144,7 @@
         </div>
       } @else {
         <div class="users-panel-body">
-          @for (user of filteredUsers(); track user.id) {
+          @for (user of displayedUsers(); track user.id) {
             <article class="user-row">
               <div class="user-row-main">
                 <div class="user-avatar" aria-hidden="true">{{ user.name.charAt(0) }}</div>

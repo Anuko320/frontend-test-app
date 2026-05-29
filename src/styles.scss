@@ -338,6 +338,23 @@ a:focus-visible {
   }
 }
 
+.input-invalid {
+  border-color: var(--danger-600);
+
+  &:focus {
+    border-color: var(--danger-600);
+    box-shadow: 0 0 0 3px rgb(198 40 40 / 0.2);
+  }
+}
+
+.field-error {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--danger-700);
+  line-height: 1.4;
+}
+
 /* ——— Buttons ——— */
 .btn {
   display: inline-flex;
