@@ -40,12 +40,14 @@ describe('ThemeService', () => {
     const service = TestBed.inject(ThemeService);
 
     service.toggle();
+    TestBed.flushEffects();
 
     expect(service.theme()).toBe('dark');
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark');
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
 
     service.toggle();
+    TestBed.flushEffects();
 
     expect(service.theme()).toBe('light');
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
