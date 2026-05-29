@@ -582,6 +582,25 @@ a:focus-visible {
   }
 }
 
+.add-user-wrap {
+  display: flex;
+  align-items: flex-end;
+  margin-top: auto;
+}
+
+.add-user-wrap .btn {
+  height: 42px;
+}
+
+.sort-select {
+  height: 42px;
+  padding: 0 12px;
+}
+
+.input {
+  height: 42px;
+}
+
 .card-list {
   display: flex;
   flex-direction: column;

@@ -12,6 +12,8 @@ import { form, FormField, email, minLength, required, submit } from '@angular/fo
 import { AuthService } from '../../../../core/services/auth';
 import { UsersService } from '../../services/users.service';
 
+import { LanguageService } from '../../../../core/services/language.service';
+
 const DELETE_MESSAGE_MS = 3000;
 
 export type NameSortOrder = 'default' | 'asc' | 'desc';
@@ -33,6 +35,8 @@ export class UsersList {
   readonly users = this.usersService.users;
   readonly loading = this.usersService.loading;
   readonly error = this.usersService.error;
+
+  readonly languageService = inject(LanguageService);
 
   readonly searchInput = signal('');
   readonly nameSortOrder = signal<NameSortOrder>('default');

@@ -28,7 +28,7 @@ export class ThemeToggle {
 
   readonly ariaLabel = computed(() =>
     this.themeService.theme() === 'dark'
-      ? 'Switch to light theme'
-      : 'Switch to dark theme',
-  );
+    ? 'Light'
+    : 'Dark',
+ );
 }

@@ -2,10 +2,15 @@
   <header class="app-topbar">
     <div class="app-topbar-inner page-container">
       <div>
-        <h1 class="page-title">Users</h1>
-        <p class="page-subtitle" aria-live="polite">{{ totalUsers() }} users in directory</p>
+        <h1 class="page-title">{{ languageService.language() === 'en'
+          ? 'Users'
+          : 'Пользователи'
+        }}</h1>
+        <p class="page-subtitle" aria-live="polite">{{ totalUsers() }} {{ languageService.language() === 'en'
+          ? 'Users in directory'
+          : 'Пользователей в системе'
+        }}</p>
       </div>
-      <button type="button" class="btn btn-secondary" (click)="logout()">Logout</button>
     </div>
   </header>
 
@@ -16,31 +21,46 @@
 
     <div class="controls-bar">
       <label class="field search-field">
-        <span class="field-label">Search by name</span>
+        <span class="field-label">{{ languageService.language() === 'en'
+          ? 'Search by name'
+          : 'Поиск по имени'
+        }}</span>
         <div class="search-row">
           <input
             class="input"
             type="search"
-            placeholder="Enter name..."
+            placeholder="{{ languageService.language() === 'en'
+            ? 'Enter name...'
+            : 'Введите имя...'
+          }}"
             [value]="searchInput()"
             (input)="onSearchInput($event)"
             aria-label="Search users by name"
           />
           @if (searchInput()) {
-            <button type="button" class="btn btn-ghost" (click)="clearSearch()">Clear</button>
+            <button type="button" class="btn btn-ghost" (click)="clearSearch()">{{ languageService.language() === 'en'
+              ? 'Clear'
+              : 'Очистить'
+            }}</button>
           }
         </div>
       </label>
 
       <label class="field sort-field">
-        <span class="field-label">Sort by name</span>
+        <span class="field-label">{{ languageService.language() === 'en'
+          ? 'Sort by A-Z'
+          : 'Сортировка по A-Z'
+        }}</span>
         <select
           class="input sort-select"
           [value]="nameSortOrder()"
           (change)="onSortChange($event)"
           aria-label="Sort users by name"
         >
-          <option value="default">Default order</option>
+          <option value="default">{{ languageService.language() === 'en'
+            ? 'Sort'
+            : 'Сортировка '
+          }}</option>
           <option value="asc">A → Z</option>
           <option value="desc">Z → A</option>
         </select>
@@ -54,20 +74,32 @@
           [attr.aria-expanded]="showAddUserPanel()"
           aria-controls="add-user-panel"
         >
-          Add user
+        {{ languageService.language() === 'en'
+        ? 'Add user'
+        : 'Добавить пользователя'
+      }}
         </button>
 
         @if (showAddUserPanel()) {
           <div id="add-user-panel" class="panel add-user-panel panel-slide-in">
-            <p class="panel-title">New user</p>
+            <p class="panel-title">{{ languageService.language() === 'en'
+              ? 'New user'
+              : 'Новый пользователь'
+            }}</p>
             <form class="add-user-form" (submit)="addUser(); $event.preventDefault()">
               <label class="field">
-                <span class="field-label">Name</span>
+                <span class="field-label">{{ languageService.language() === 'en'
+                  ? 'Name'
+                  : 'Имя'
+                }}</span>
                 <input
                   class="input"
                   [class.input-invalid]="newUserForm.name().invalid() && newUserForm.name().touched()"
                   type="text"
-                  placeholder="Name"
+                  placeholder="{{ languageService.language() === 'en'
+                  ? 'Name'
+                  : 'Имя'
+                }}"
                   [formField]="newUserForm.name"
                 />
                 @if (newUserForm.name().touched() && newUserForm.name().errors().length) {
@@ -76,12 +108,18 @@
               </label>
 
               <label class="field">
-                <span class="field-label">Email</span>
+                <span class="field-label">{{ languageService.language() === 'en'
+                  ? 'Email'
+                  : 'Мейл'
+                }}</span>
                 <input
                   class="input"
                   [class.input-invalid]="newUserForm.email().invalid() && newUserForm.email().touched()"
                   type="email"
-                  placeholder="Email"
+                  placeholder="{{ languageService.language() === 'en'
+                  ? 'Email'
+                  : 'Мейл'
+                }}"
                   [formField]="newUserForm.email"
                 />
                 @if (newUserForm.email().touched() && newUserForm.email().errors().length) {
@@ -90,12 +128,18 @@
               </label>
 
               <label class="field">
-                <span class="field-label">City</span>
+                <span class="field-label">{{ languageService.language() === 'en'
+                  ? 'City'
+                  : 'Город'
+                }}</span>
                 <input
                   class="input"
                   [class.input-invalid]="newUserForm.city().invalid() && newUserForm.city().touched()"
                   type="text"
-                  placeholder="City"
+                  placeholder="{{ languageService.language() === 'en'
+                  ? 'City'
+                  : 'Город'
+                }}"
                   [formField]="newUserForm.city"
                 />
                 @if (newUserForm.city().touched() && newUserForm.city().errors().length) {
@@ -110,10 +154,16 @@
                   [disabled]="!canAddUser()"
                   [attr.aria-disabled]="!canAddUser()"
                 >
-                  Save
+                {{ languageService.language() === 'en'
+                ? 'Save'
+                : 'Сохранить'
+              }}
                 </button>
                 <button type="button" class="btn btn-secondary" (click)="closeAddUserPanel()">
-                  Cancel
+                  {{ languageService.language() === 'en'
+                  ? 'Cancel'
+                  : 'Отмена'
+              }}
                 </button>
               </div>
             </form>
@@ -131,16 +181,25 @@
 
     <section class="content-panel" aria-label="Users list">
       <div class="content-panel-header">
-        <h2>All users</h2>
+        <h2>{{ languageService.language() === 'en'
+          ? 'All users'
+          : 'Все пользователи'
+        }}</h2>
         @if (!loading()) {
-          <span class="badge">{{ visibleUsers() }} shown</span>
+          <span class="badge">{{ visibleUsers() }} {{ languageService.language() === 'en'
+            ? 'Shown'
+            : 'Пользователей'
+          }}</span>
         }
       </div>
 
       @if (loading()) {
         <div class="loader" role="status" aria-live="polite" aria-busy="true">
           <div class="loader-spinner" aria-hidden="true"></div>
-          <p class="loader-text">Loading users...</p>
+          <p class="loader-text">{{ languageService.language() === 'en'
+            ? 'Loading users...'
+            : 'Загрузка пользователей...'
+          }}</p>
         </div>
       } @else {
         <div class="users-panel-body">
@@ -164,20 +223,32 @@
                   >
                     <div class="form-actions">
                       <button type="button" class="btn btn-danger-solid" (click)="confirmDelete()">
-                        Delete
+                        {{ languageService.language() === 'en'
+                        ? 'Delete'
+                        : 'Удалить'
+                       }}
                       </button>
                       <button type="button" class="btn btn-secondary" (click)="cancelDelete()">
-                        Cancel
+                        {{ languageService.language() === 'en'
+                        ? 'Cancel'
+                        : 'Отмена'
+                       }}
                       </button>
                     </div>
                   </div>
                 } @else {
                   <button type="button" class="btn btn-danger" (click)="requestDelete(user.id)">
-                    Delete user
+                    {{ languageService.language() === 'en'
+                    ? 'Delete User'
+                    : 'Удалить пользователя'
+                   }}
                   </button>
 
                   <button type="button" class="btn btn-edit" (click)="openEditUser(user)">
-                    Edit user
+                    {{ languageService.language() === 'en'
+                    ? 'Edit user'
+                    : 'Редактирование пользователя'
+                   }}
                   </button>
                 }
               </div>
@@ -185,9 +256,15 @@
           } @empty {
             <p class="status-text empty-state">
               @if (searchInput().trim()) {
-                Nothing found
+                {{ languageService.language() === 'en'
+                ? 'Nothing found'
+                : 'Ничего не найдено'
+               }}
               } @else {
-                No users found
+                {{ languageService.language() === 'en'
+                ? 'No users found'
+                : 'Не найдено пользователей'
+              }}
               }
             </p>
           }
