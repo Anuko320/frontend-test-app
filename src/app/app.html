@@ -3,16 +3,18 @@
 
   <app-language-toggle />
 
-  <button
-    type="button"
-    class="btn btn-secondary"
-    (click)="logout()"
-  >
-  {{ languageService.language() === 'en'
-  ? 'Logout'
-  : 'Выйти'
-}}
-  </button>
+  @if (authService.isAuthenticated()) {
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="logout()"
+    >
+      {{ languageService.language() === 'en'
+        ? 'Logout'
+        : 'Выйти'
+      }}
+    </button>
+  }
 </div>
 
 <router-outlet />
