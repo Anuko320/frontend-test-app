@@ -1,14 +1,16 @@
-import { Observable, Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
-export class DialogRef<T = unknown> {
-  private readonly closed$ = new Subject<T | undefined>();
+@Injectable()
+export class DialogRef<T = any> {
+  private result$ = new Subject<T | null>();
 
-  afterClosed(): Observable<T | undefined> {
-    return this.closed$.asObservable();
+  close(value?: T) {
+    this.result$.next(value ?? null);
+    this.result$.complete();
   }
 
-  close(result?: T): void {
-    this.closed$.next(result);
-    this.closed$.complete();
+  afterClosed() {
+    return this.result$.asObservable();
   }
 }
