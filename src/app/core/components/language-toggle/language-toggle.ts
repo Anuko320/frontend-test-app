@@ -19,8 +19,6 @@ export class LanguageToggle {
   readonly languageService = inject(LanguageService);
 
   readonly label = computed(() =>
-    this.languageService.language() === 'en'
-      ? 'Русский'
-      : 'English',
+    this.languageService.language() === 'en' ? 'Русский' : 'English',
   );
 }

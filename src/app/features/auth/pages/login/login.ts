@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { form, FormField, required, submit } from '@angular/forms/signals';
+import { TranslatePipe } from '@ngx-translate/core';
 
 import { AuthService } from '../../../../core/services/auth';
 
 @Component({
   selector: 'app-login',
-  imports: [FormField],
+  imports: [FormField, TranslatePipe],
   templateUrl: './login.html',
   styleUrl: './login.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,8 +24,8 @@ export class Login {
   });
 
   readonly loginForm = form(this.loginModel, (schemaPath) => {
-    required(schemaPath.login, { message: 'Введите логин' });
-    required(schemaPath.password, { message: 'Введите пароль' });
+    required(schemaPath.login, { message: 'auth.loginRequired' });
+    required(schemaPath.password, { message: 'auth.passwordRequired' });
   });
 
   onSubmit(): void {
@@ -39,7 +40,7 @@ export class Login {
         return;
       }
 
-      this.errorMessage.set('Неверный логин или пароль');
+      this.errorMessage.set('auth.invalidCredentials');
     });
   }
 }

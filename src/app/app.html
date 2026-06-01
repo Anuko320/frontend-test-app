@@ -9,10 +9,7 @@
       class="btn btn-secondary"
       (click)="logout()"
     >
-      {{ languageService.language() === 'en'
-        ? 'Logout'
-        : 'Выйти'
-      }}
+      {{ 'app.logout' | translate }}
     </button>
   }
 </div>

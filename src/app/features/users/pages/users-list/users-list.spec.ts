@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { signal } from '@angular/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { vi } from 'vitest';
 
 import { UsersList } from './users-list';
@@ -27,6 +28,10 @@ describe('UsersList', () => {
       imports: [UsersList],
       providers: [
         provideRouter([]),
+        provideTranslateService({
+          fallbackLang: 'en',
+          lang: 'en',
+        }),
         {
           provide: UsersService,
           useValue: {
@@ -80,7 +85,7 @@ describe('UsersList', () => {
     expect(component.filteredUsers().length).toBe(0);
 
     const emptyEl = fixture.nativeElement.querySelector('.empty-state');
-    expect(emptyEl?.textContent).toContain('Nothing found');
+    expect(emptyEl?.textContent).toContain('users.nothingFound');
   });
 
   it('should sort users alphabetically A to Z', () => {
@@ -129,7 +134,7 @@ describe('UsersList', () => {
     component.confirmDelete();
 
     expect(deleteUserSpy).toHaveBeenCalledWith(1);
-    expect(component.deleteMessage()).toContain('удалён локально');
+    expect(component.deleteMessage()).toContain('users.deleteSuccess');
   });
 });
 
@@ -139,6 +144,10 @@ describe('UsersList loading state', () => {
       imports: [UsersList],
       providers: [
         provideRouter([]),
+        provideTranslateService({
+          fallbackLang: 'en',
+          lang: 'en',
+        }),
         {
           provide: UsersService,
           useValue: {

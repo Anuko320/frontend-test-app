@@ -12,11 +12,10 @@ import {
 } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 import { form, FormField, email, minLength, required, submit } from '@angular/forms/signals';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '../../../../core/services/auth';
 import { UsersService } from '../../services/users.service';
-
-import { LanguageService } from '../../../../core/services/language.service';
 
 const DELETE_MESSAGE_MS = 3000;
 
@@ -28,6 +27,7 @@ export type NameSortOrder = 'default' | 'asc' | 'desc';
     FormField,
     CdkOverlayOrigin,
     CdkConnectedOverlay,
+    TranslatePipe,
   ],
   templateUrl: './users-list.html',
   styleUrl: './users-list.scss',
@@ -38,13 +38,12 @@ export class UsersList {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly translate = inject(TranslateService);
   private deleteMessageTimer: ReturnType<typeof setTimeout> | null = null;
 
   readonly users = this.usersService.users;
   readonly loading = this.usersService.loading;
   readonly error = this.usersService.error;
-
-  readonly languageService = inject(LanguageService);
 
   readonly searchInput = signal('');
   readonly nameSortOrder = signal<NameSortOrder>('default');
@@ -97,11 +96,11 @@ export class UsersList {
   });
 
   readonly newUserForm = form(this.newUserModel, (schemaPath) => {
-    required(schemaPath.name, { message: 'Имя обязательно' });
-    minLength(schemaPath.name, 3, { message: 'Имя должно быть не короче 3 символов' });
-    required(schemaPath.email, { message: 'Email обязателен' });
-    email(schemaPath.email, { message: 'Введите корректный email' });
-    required(schemaPath.city, { message: 'Город обязателен' });
+    required(schemaPath.name, { message: 'users.form.nameRequired' });
+    minLength(schemaPath.name, 3, { message: 'users.form.nameMinLength' });
+    required(schemaPath.email, { message: 'users.form.emailRequired' });
+    email(schemaPath.email, { message: 'users.form.emailInvalid' });
+    required(schemaPath.city, { message: 'users.form.cityRequired' });
   });
 
   readonly canAddUser = computed(() => this.newUserForm().valid());
@@ -146,7 +145,7 @@ export class UsersList {
     submit(this.newUserForm, async () => {
       const model = this.newUserModel();
       const editingId = this.editingUserId();
-  
+
       if (editingId !== null) {
         this.usersService.updateUser({
           id: editingId,
@@ -154,7 +153,7 @@ export class UsersList {
           email: model.email,
           city: model.city,
         });
-  
+
         this.editingUserId.set(null);
       } else {
         this.usersService.addUser({
@@ -163,13 +162,13 @@ export class UsersList {
           city: model.city,
         });
       }
-  
+
       this.newUserModel.set({
         name: '',
         email: '',
         city: '',
       });
-  
+
       this.showAddUserPanel.set(false);
     });
   }
@@ -185,13 +184,13 @@ export class UsersList {
     city: string;
   }): void {
     this.editingUserId.set(user.id);
-  
+
     this.newUserModel.set({
       name: user.name,
       email: user.email,
       city: user.city,
     });
-  
+
     this.showAddUserPanel.set(true);
   }
 
@@ -209,7 +208,9 @@ export class UsersList {
     this.pendingDeleteId.set(null);
 
     if (removed) {
-      this.showDeleteMessage(`${removed.name} удалён локально`);
+      this.showDeleteMessage(
+        this.translate.instant('users.deleteSuccess', { name: removed.name }),
+      );
     }
   }
 

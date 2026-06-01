@@ -2,14 +2,10 @@
   <header class="app-topbar">
     <div class="app-topbar-inner page-container">
       <div>
-        <h1 class="page-title">{{ languageService.language() === 'en'
-          ? 'Users'
-          : 'Пользователи'
-        }}</h1>
-        <p class="page-subtitle" aria-live="polite">{{ totalUsers() }} {{ languageService.language() === 'en'
-          ? 'Users in directory'
-          : 'Пользователей в системе'
-        }}</p>
+        <h1 class="page-title">{{ 'users.title' | translate }}</h1>
+        <p class="page-subtitle" aria-live="polite">
+          {{ 'users.subtitle' | translate: { count: totalUsers() } }}
+        </p>
       </div>
     </div>
   </header>
@@ -21,97 +17,78 @@
 
     <div class="controls-bar">
       <label class="field search-field">
-        <span class="field-label">{{ languageService.language() === 'en'
-          ? 'Search by name'
-          : 'Поиск по имени'
-        }}</span>
+        <span class="field-label">{{ 'users.search.label' | translate }}</span>
         <div class="search-row">
           <input
             class="input"
             type="search"
-            placeholder="{{ languageService.language() === 'en'
-            ? 'Enter name...'
-            : 'Введите имя...'
-          }}"
+            [placeholder]="'users.search.placeholder' | translate"
             [value]="searchInput()"
             (input)="onSearchInput($event)"
-            aria-label="Search users by name"
+            [attr.aria-label]="'users.search.ariaLabel' | translate"
           />
           @if (searchInput()) {
-            <button type="button" class="btn btn-ghost" (click)="clearSearch()">{{ languageService.language() === 'en'
-              ? 'Clear'
-              : 'Очистить'
-            }}</button>
+            <button type="button" class="btn btn-ghost" (click)="clearSearch()">
+              {{ 'users.search.clear' | translate }}
+            </button>
           }
         </div>
       </label>
 
       <div class="sort-field">
-  <span class="field-label">
-    {{
-      languageService.language() === 'en'
-        ? 'Sort by A-Z'
-        : 'Сортировка по A-Z'
-    }}
-  </span>
+        <span class="field-label">{{ 'users.sort.label' | translate }}</span>
 
-  <button
-    cdkOverlayOrigin
-    #sortTrigger="cdkOverlayOrigin"
-    type="button"
-    class="input sort-select-btn"
-    (click)="showSortDropdown.set(!showSortDropdown())"
-  >
-    @if (nameSortOrder() === 'asc') {
-      <span>A → Z</span>
-    } @else if (nameSortOrder() === 'desc') {
-      <span>Z → A</span>
-    } @else {
-      <span>
-        {{
-          languageService.language() === 'en'
-            ? 'Sort'
-            : 'Сортировка'
-        }}
-      </span>
-    }
-  </button>
+        <button
+          cdkOverlayOrigin
+          #sortTrigger="cdkOverlayOrigin"
+          type="button"
+          class="input sort-select-btn"
+          (click)="showSortDropdown.set(!showSortDropdown())"
+        >
+          @if (nameSortOrder() === 'asc') {
+            <span>A -> Z</span>
+          } @else if (nameSortOrder() === 'desc') {
+            <span>Z -> A</span>
+          } @else {
+            <span>{{ 'users.sort.placeholder' | translate }}</span>
+          }
+        </button>
 
-  <ng-template
-    cdkConnectedOverlay
-    [cdkConnectedOverlayOrigin]="sortTrigger"
-    [cdkConnectedOverlayOpen]="showSortDropdown()"
-    [cdkConnectedOverlayHasBackdrop]="true"
-    (backdropClick)="showSortDropdown.set(false)"
-    [cdkConnectedOverlayPositions]="[
-      {
-        originX: 'start',
-        originY: 'bottom',
-        overlayX: 'start',
-        overlayY: 'top',
-        offsetY: 8
-      }
-    ]"
-  >
-    <div class="sort-dropdown">
-      <button
-        type="button"
-        class="sort-dropdown"
-        (click)="nameSortOrder.set('asc'); showSortDropdown.set(false)"
-      >
-        A → Z
-      </button>
+        <ng-template
+          cdkConnectedOverlay
+          [cdkConnectedOverlayOrigin]="sortTrigger"
+          [cdkConnectedOverlayOpen]="showSortDropdown()"
+          [cdkConnectedOverlayHasBackdrop]="true"
+          (backdropClick)="showSortDropdown.set(false)"
+          [cdkConnectedOverlayPositions]="[
+            {
+              originX: 'start',
+              originY: 'bottom',
+              overlayX: 'start',
+              overlayY: 'top',
+              offsetY: 8
+            }
+          ]"
+        >
+          <div class="sort-dropdown">
+            <button
+              type="button"
+              class="sort-dropdown"
+              (click)="nameSortOrder.set('asc'); showSortDropdown.set(false)"
+            >
+              A -> Z
+            </button>
 
-      <button
-        type="button"
-        class="sort-dropdown"
-        (click)="nameSortOrder.set('desc'); showSortDropdown.set(false)"
-      >
-        Z → A
-      </button>
-    </div>
-  </ng-template>
-</div>
+            <button
+              type="button"
+              class="sort-dropdown"
+              (click)="nameSortOrder.set('desc'); showSortDropdown.set(false)"
+            >
+              Z -> A
+            </button>
+          </div>
+        </ng-template>
+      </div>
 
       <div class="add-user-wrap">
         <button
@@ -121,151 +98,118 @@
           class="btn btn-primary"
           (click)="toggleAddUserPanel()"
         >
-          {{
-            languageService.language() === 'en'
-              ? 'Add user'
-              : 'Добавить пользователя'
-          }}
+          {{ 'users.addUser' | translate }}
         </button>
-      
+
         <ng-template
-        cdkConnectedOverlay
-        [cdkConnectedOverlayOrigin]="addUserTrigger"
-        [cdkConnectedOverlayOpen]="showAddUserPanel()"
-        [cdkConnectedOverlayHasBackdrop]="true"
-        (backdropClick)="closeAddUserPanel()"
-        [cdkConnectedOverlayPositions]="[
-          {
-            originX: 'start',
-            originY: 'bottom',
-            overlayX: 'start',
-            overlayY: 'top',
-            offsetY: 12
+          cdkConnectedOverlay
+          [cdkConnectedOverlayOrigin]="addUserTrigger"
+          [cdkConnectedOverlayOpen]="showAddUserPanel()"
+          [cdkConnectedOverlayHasBackdrop]="true"
+          (backdropClick)="closeAddUserPanel()"
+          [cdkConnectedOverlayPositions]="[
+            {
+              originX: 'start',
+              originY: 'bottom',
+              overlayX: 'start',
+              overlayY: 'top',
+              offsetY: 12
+            }
+          ]"
+        >
+          @if (showAddUserPanel()) {
+            <div id="add-user-panel" class="panel add-user-panel panel-slide-in">
+              <p class="panel-title">{{ 'users.form.title' | translate }}</p>
+              <form class="add-user-form" (submit)="addUser(); $event.preventDefault()">
+                <label class="field">
+                  <span class="field-label">{{ 'users.form.name' | translate }}</span>
+                  <input
+                    class="input"
+                    [class.input-invalid]="newUserForm.name().invalid() && newUserForm.name().touched()"
+                    type="text"
+                    [placeholder]="'users.form.name' | translate"
+                    [formField]="newUserForm.name"
+                  />
+                  @if (newUserForm.name().touched() && newUserForm.name().errors().length) {
+                    <span class="field-error" role="alert">
+                      {{ newUserForm.name().errors()[0].message | translate }}
+                    </span>
+                  }
+                </label>
+
+                <label class="field">
+                  <span class="field-label">{{ 'users.form.email' | translate }}</span>
+                  <input
+                    class="input"
+                    [class.input-invalid]="newUserForm.email().invalid() && newUserForm.email().touched()"
+                    type="email"
+                    [placeholder]="'users.form.email' | translate"
+                    [formField]="newUserForm.email"
+                  />
+                  @if (newUserForm.email().touched() && newUserForm.email().errors().length) {
+                    <span class="field-error" role="alert">
+                      {{ newUserForm.email().errors()[0].message | translate }}
+                    </span>
+                  }
+                </label>
+
+                <label class="field">
+                  <span class="field-label">{{ 'users.form.city' | translate }}</span>
+                  <input
+                    class="input"
+                    [class.input-invalid]="newUserForm.city().invalid() && newUserForm.city().touched()"
+                    type="text"
+                    [placeholder]="'users.form.city' | translate"
+                    [formField]="newUserForm.city"
+                  />
+                  @if (newUserForm.city().touched() && newUserForm.city().errors().length) {
+                    <span class="field-error" role="alert">
+                      {{ newUserForm.city().errors()[0].message | translate }}
+                    </span>
+                  }
+                </label>
+
+                <div class="form-actions">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    [disabled]="!canAddUser()"
+                    [attr.aria-disabled]="!canAddUser()"
+                  >
+                    {{ 'common.save' | translate }}
+                  </button>
+                  <button type="button" class="btn btn-secondary" (click)="closeAddUserPanel()">
+                    {{ 'common.cancel' | translate }}
+                  </button>
+                </div>
+              </form>
+            </div>
           }
-        ]"
-      >
-
-        @if (showAddUserPanel()) {
-          <div id="add-user-panel" class="panel add-user-panel panel-slide-in">
-            <p class="panel-title">{{ languageService.language() === 'en'
-              ? 'New user'
-              : 'Новый пользователь'
-            }}</p>
-            <form class="add-user-form" (submit)="addUser(); $event.preventDefault()">
-              <label class="field">
-                <span class="field-label">{{ languageService.language() === 'en'
-                  ? 'Name'
-                  : 'Имя'
-                }}</span>
-                <input
-                  class="input"
-                  [class.input-invalid]="newUserForm.name().invalid() && newUserForm.name().touched()"
-                  type="text"
-                  placeholder="{{ languageService.language() === 'en'
-                  ? 'Name'
-                  : 'Имя'
-                }}"
-                  [formField]="newUserForm.name"
-                />
-                @if (newUserForm.name().touched() && newUserForm.name().errors().length) {
-                  <span class="field-error" role="alert">{{ newUserForm.name().errors()[0].message }}</span>
-                }
-              </label>
-
-              <label class="field">
-                <span class="field-label">{{ languageService.language() === 'en'
-                  ? 'Email'
-                  : 'Мейл'
-                }}</span>
-                <input
-                  class="input"
-                  [class.input-invalid]="newUserForm.email().invalid() && newUserForm.email().touched()"
-                  type="email"
-                  placeholder="{{ languageService.language() === 'en'
-                  ? 'Email'
-                  : 'Мейл'
-                }}"
-                  [formField]="newUserForm.email"
-                />
-                @if (newUserForm.email().touched() && newUserForm.email().errors().length) {
-                  <span class="field-error" role="alert">{{ newUserForm.email().errors()[0].message }}</span>
-                }
-              </label>
-
-              <label class="field">
-                <span class="field-label">{{ languageService.language() === 'en'
-                  ? 'City'
-                  : 'Город'
-                }}</span>
-                <input
-                  class="input"
-                  [class.input-invalid]="newUserForm.city().invalid() && newUserForm.city().touched()"
-                  type="text"
-                  placeholder="{{ languageService.language() === 'en'
-                  ? 'City'
-                  : 'Город'
-                }}"
-                  [formField]="newUserForm.city"
-                />
-                @if (newUserForm.city().touched() && newUserForm.city().errors().length) {
-                  <span class="field-error" role="alert">{{ newUserForm.city().errors()[0].message }}</span>
-                }
-              </label>
-
-              <div class="form-actions">
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  [disabled]="!canAddUser()"
-                  [attr.aria-disabled]="!canAddUser()"
-                >
-                {{ languageService.language() === 'en'
-                ? 'Save'
-                : 'Сохранить'
-              }}
-                </button>
-                <button type="button" class="btn btn-secondary" (click)="closeAddUserPanel()">
-                  {{ languageService.language() === 'en'
-                  ? 'Cancel'
-                  : 'Отмена'
-              }}
-                </button>
-              </div>
-            </form>
-          </div>
-        }
-      </ng-template>
-    </div>
+        </ng-template>
+      </div>
     </div>
 
     @if (error(); as errorMessage) {
       <div class="error-block" role="alert" aria-live="polite">
         <p class="alert alert-error">{{ errorMessage }}</p>
-        <button type="button" class="btn btn-secondary" (click)="retryLoad()">Retry</button>
+        <button type="button" class="btn btn-secondary" (click)="retryLoad()">
+          {{ 'common.retry' | translate }}
+        </button>
       </div>
     }
 
-    <section class="content-panel" aria-label="Users list">
+    <section class="content-panel" [attr.aria-label]="'users.listAriaLabel' | translate">
       <div class="content-panel-header">
-        <h2>{{ languageService.language() === 'en'
-          ? 'All users'
-          : 'Все пользователи'
-        }}</h2>
+        <h2>{{ 'users.allUsers' | translate }}</h2>
         @if (!loading()) {
-          <span class="badge">{{ visibleUsers() }} {{ languageService.language() === 'en'
-            ? 'Shown'
-            : 'Пользователей'
-          }}</span>
+          <span class="badge">{{ 'users.shown' | translate: { count: visibleUsers() } }}</span>
         }
       </div>
 
       @if (loading()) {
         <div class="loader" role="status" aria-live="polite" aria-busy="true">
           <div class="loader-spinner" aria-hidden="true"></div>
-          <p class="loader-text">{{ languageService.language() === 'en'
-            ? 'Loading users...'
-            : 'Загрузка пользователей...'
-          }}</p>
+          <p class="loader-text">{{ 'users.loading' | translate }}</p>
         </div>
       } @else {
         <div class="users-panel-body">
@@ -285,36 +229,24 @@
                   <div
                     class="delete-confirm"
                     role="group"
-                    [attr.aria-label]="'Confirm delete ' + user.name"
+                    [attr.aria-label]="'users.confirmDeleteAriaLabel' | translate: { name: user.name }"
                   >
                     <div class="form-actions">
                       <button type="button" class="btn btn-danger-solid" (click)="confirmDelete()">
-                        {{ languageService.language() === 'en'
-                        ? 'Delete'
-                        : 'Удалить'
-                       }}
+                        {{ 'common.delete' | translate }}
                       </button>
                       <button type="button" class="btn btn-secondary" (click)="cancelDelete()">
-                        {{ languageService.language() === 'en'
-                        ? 'Cancel'
-                        : 'Отмена'
-                       }}
+                        {{ 'common.cancel' | translate }}
                       </button>
                     </div>
                   </div>
                 } @else {
                   <button type="button" class="btn btn-danger" (click)="requestDelete(user.id)">
-                    {{ languageService.language() === 'en'
-                    ? 'Delete User'
-                    : 'Удалить пользователя'
-                   }}
+                    {{ 'users.deleteUser' | translate }}
                   </button>
 
                   <button type="button" class="btn btn-edit" (click)="openEditUser(user)">
-                    {{ languageService.language() === 'en'
-                    ? 'Edit user'
-                    : 'Редактирование пользователя'
-                   }}
+                    {{ 'users.editUser' | translate }}
                   </button>
                 }
               </div>
@@ -322,15 +254,9 @@
           } @empty {
             <p class="status-text empty-state">
               @if (searchInput().trim()) {
-                {{ languageService.language() === 'en'
-                ? 'Nothing found'
-                : 'Ничего не найдено'
-               }}
+                {{ 'users.nothingFound' | translate }}
               } @else {
-                {{ languageService.language() === 'en'
-                ? 'No users found'
-                : 'Не найдено пользователей'
-              }}
+                {{ 'users.noUsersFound' | translate }}
               }
             </p>
           }
