@@ -18,6 +18,11 @@
     "delete": "Delete",
     "retry": "Retry"
   },
+  "confirm": {
+    "logoutTitle": "Confirm logout",
+    "logoutMessage": "Are you sure you want to leave your account?",
+    "confirm": "Confirm"
+  },
   "users": {
     "title": "Users",
     "subtitle": "{{count}} users in directory",
