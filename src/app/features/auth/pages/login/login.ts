@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { form, FormField, required, submit } from '@angular/forms/signals';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { AuthService } from '../../../../core/services/auth';
 
 @Component({
   selector: 'app-login',
-  imports: [FormField, TranslatePipe],
+  imports: [FormField, TranslateModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { ThemeToggle } from './core/components/theme-toggle/theme-toggle';
 import { ThemeService } from './core/services/theme.service';
@@ -11,7 +11,7 @@ import { AuthService } from './core/services/auth';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ThemeToggle, LanguageToggle, TranslatePipe],
+  imports: [RouterOutlet, ThemeToggle, LanguageToggle, TranslateModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

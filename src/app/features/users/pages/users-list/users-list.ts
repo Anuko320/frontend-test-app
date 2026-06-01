@@ -12,7 +12,7 @@ import {
 } from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 import { form, FormField, email, minLength, required, submit } from '@angular/forms/signals';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '../../../../core/services/auth';
 import { UsersService } from '../../services/users.service';
@@ -27,7 +27,7 @@ export type NameSortOrder = 'default' | 'asc' | 'desc';
     FormField,
     CdkOverlayOrigin,
     CdkConnectedOverlay,
-    TranslatePipe,
+    TranslateModule,
   ],
   templateUrl: './users-list.html',
   styleUrl: './users-list.scss',
