@@ -20,6 +20,8 @@ import { UsersService } from '../../services/users.service';
 import { Dialog } from '@angular/cdk/dialog';
 import { AddUserDialog } from '../../../../shared/add-user-dialog/add-user-dialog';
 
+import { EditUserDialog, EditUserDialogData } from '../../../../shared/edit-user-dialog/edit-user-dialog';
+
 const DELETE_MESSAGE_MS = 3000;
 
 export type NameSortOrder = 'default' | 'asc' | 'desc';
@@ -188,21 +190,11 @@ export class UsersList {
     this.pendingDeleteId.set(id);
   }
 
-  openEditUser(user: {
-    id: number;
-    name: string;
-    email: string;
-    city: string;
-  }): void {
-    this.editingUserId.set(user.id);
-
-    this.newUserModel.set({
-      name: user.name,
-      email: user.email,
-      city: user.city,
+  openEditUser(user: { id: number; name: string; email: string; city: string }): void {
+    this.dialog.open<unknown, EditUserDialogData>(EditUserDialog, {
+      data: user,
+      panelClass: 'dialog-panel',
     });
-
-    this.showAddUserPanel.set(true);
   }
 
   cancelDelete(): void {
