@@ -1,4 +1,6 @@
 /* Design tokens — neutral base + expanded accents (SaaS / dashboard style) */
+@import '@angular/cdk/overlay-prebuilt.css';
+
 :root {
   /* Neutrals */
   --gray-50: #f8fafc;
@@ -397,6 +399,7 @@ a:focus-visible {
 
 /* ——— Buttons ——— */
 .btn {
+  margin-right: 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -474,6 +477,16 @@ a:focus-visible {
     background: #9a1616;
     border-color: #9a1616;
   }
+}
+
+.btn-edit {
+  background-color: #3b82f6;
+  color: white;
+  margin-right: 10px;
+}
+
+.btn-edit:hover {
+  background-color: #2563eb;
 }
 
 .btn-block {
@@ -571,6 +584,25 @@ a:focus-visible {
   }
 }
 
+.add-user-wrap {
+  display: flex;
+  align-items: flex-end;
+  margin-top: auto;
+}
+
+.add-user-wrap .btn {
+  height: 42px;
+}
+
+.sort-select {
+  height: 42px;
+  padding: 0 12px;
+}
+
+.input {
+  height: 42px;
+}
+
 .card-list {
   display: flex;
   flex-direction: column;
@@ -598,5 +630,128 @@ a:focus-visible {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  
+}
+
+.dialog-panel .cdk-dialog-container {
+  background: transparent;
+  padding: 0;
+}
+
+.cdk-overlay-pane .sort-dropdown {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 220px;
+
+  padding: 8px;
+
+  background: #1f2937;
+
+  border-radius: 16px;
+
+  border: 1px solid rgba(255,255,255,.08);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.35);
+}
+
+.cdk-overlay-pane .sort-option {
+  width: 100%;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: white;
+
+  padding: 12px 14px;
+
+  border-radius: 10px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: .2s;
+}
+
+.cdk-overlay-pane .sort-option:hover {
+  background: rgba(255,255,255,.08);
+}
+
+.sort-select-btn {
+  min-width: 220px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  cursor: pointer;
+}
+
+.sort-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-confirm-dialog-backdrop {
+  background: rgb(15 23 42 / 0.48);
+  backdrop-filter: blur(2px);
+}
+
+.app-confirm-dialog-panel {
+  animation: confirm-dialog-in 160ms ease-out;
+}
+
+@keyframes confirm-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .cdk-overlay-pane.dialog-panel {
+    width: 100dvw !important;
+    height: 100dvh !important;
+    max-width: 100dvw !important;
+    max-height: 100dvh !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+
+  .dialog-panel .cdk-dialog-container {
+    width: 100dvw !important;
+    height: 100dvh !important;
+    max-width: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+
+  .dialog-panel .modal {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100dvh !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow-y: auto !important;
+    padding: var(--space-6) !important;
+    padding-bottom: max(var(--space-6), env(safe-area-inset-bottom)) !important;
+  }
+
+  .dialog-panel .add-user-form {
+    padding-bottom: 40vh; 
   }
 }

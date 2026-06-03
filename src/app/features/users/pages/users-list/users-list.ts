@@ -6,11 +6,22 @@ import {
   inject,
   signal,
 } from '@angular/core';
+import {
+  CdkConnectedOverlay,
+  CdkOverlayOrigin,
+} from '@angular/cdk/overlay';
 import { Router } from '@angular/router';
 import { form, FormField, email, minLength, required, submit } from '@angular/forms/signals';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '../../../../core/services/auth';
 import { UsersService } from '../../services/users.service';
+
+import { Dialog } from '@angular/cdk/dialog';
+import { AddUserDialog } from '../../../../shared/add-user-dialog/add-user-dialog';
+
+import { EditUserDialog, EditUserDialogData } from '../../../../shared/edit-user-dialog/edit-user-dialog';
+import { AppHeader } from '../../../../shared/app-header/app-header';
 
 const DELETE_MESSAGE_MS = 3000;
 
@@ -18,7 +29,12 @@ export type NameSortOrder = 'default' | 'asc' | 'desc';
 
 @Component({
   selector: 'app-users-list',
-  imports: [FormField],
+  imports: [
+    CdkOverlayOrigin,
+    CdkConnectedOverlay,
+    TranslateModule,
+    AppHeader,
+  ],
   templateUrl: './users-list.html',
   styleUrl: './users-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,7 +44,10 @@ export class UsersList {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly translate = inject(TranslateService);
   private deleteMessageTimer: ReturnType<typeof setTimeout> | null = null;
+
+  private readonly dialog = inject(Dialog);
 
   readonly users = this.usersService.users;
   readonly loading = this.usersService.loading;
@@ -37,7 +56,12 @@ export class UsersList {
   readonly searchInput = signal('');
   readonly nameSortOrder = signal<NameSortOrder>('default');
   readonly pendingDeleteId = signal<number | null>(null);
+
   readonly showAddUserPanel = signal(false);
+  readonly showSortDropdown = signal(false);
+
+  readonly editingUserId = signal<number | null>(null);
+
   readonly deleteMessage = signal<string | null>(null);
 
   readonly filteredUsers = computed(() => {
@@ -80,11 +104,11 @@ export class UsersList {
   });
 
   readonly newUserForm = form(this.newUserModel, (schemaPath) => {
-    required(schemaPath.name, { message: 'Имя обязательно' });
-    minLength(schemaPath.name, 3, { message: 'Имя должно быть не короче 3 символов' });
-    required(schemaPath.email, { message: 'Email обязателен' });
-    email(schemaPath.email, { message: 'Введите корректный email' });
-    required(schemaPath.city, { message: 'Город обязателен' });
+    required(schemaPath.name, { message: 'users.form.nameRequired' });
+    minLength(schemaPath.name, 3, { message: 'users.form.nameMinLength' });
+    required(schemaPath.email, { message: 'users.form.emailRequired' });
+    email(schemaPath.email, { message: 'users.form.emailInvalid' });
+    required(schemaPath.city, { message: 'users.form.cityRequired' });
   });
 
   readonly canAddUser = computed(() => this.newUserForm().valid());
@@ -128,18 +152,50 @@ export class UsersList {
   addUser(): void {
     submit(this.newUserForm, async () => {
       const model = this.newUserModel();
-      this.usersService.addUser({
-        name: model.name,
-        email: model.email,
-        city: model.city,
+      const editingId = this.editingUserId();
+
+      if (editingId !== null) {
+        this.usersService.updateUser({
+          id: editingId,
+          name: model.name,
+          email: model.email,
+          city: model.city,
+        });
+
+        this.editingUserId.set(null);
+      } else {
+        this.usersService.addUser({
+          name: model.name,
+          email: model.email,
+          city: model.city,
+        });
+      }
+
+      this.newUserModel.set({
+        name: '',
+        email: '',
+        city: '',
       });
-      this.newUserModel.set({ name: '', email: '', city: '' });
+
       this.showAddUserPanel.set(false);
+    });
+  }
+
+  openAddUserDialog(): void {
+    this.dialog.open(AddUserDialog, {
+      panelClass: 'dialog-panel',
     });
   }
 
   requestDelete(id: number): void {
     this.pendingDeleteId.set(id);
+  }
+
+  openEditUser(user: { id: number; name: string; email: string; city: string }): void {
+    this.dialog.open<unknown, EditUserDialogData>(EditUserDialog, {
+      data: user,
+      panelClass: 'dialog-panel',
+    });
   }
 
   cancelDelete(): void {
@@ -156,7 +212,9 @@ export class UsersList {
     this.pendingDeleteId.set(null);
 
     if (removed) {
-      this.showDeleteMessage(`${removed.name} удалён локально`);
+      this.showDeleteMessage(
+        this.translate.instant('users.deleteSuccess', { name: removed.name }),
+      );
     }
   }
 
