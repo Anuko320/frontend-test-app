@@ -1,14 +1,5 @@
 <div class="page">
-  <header class="app-topbar">
-    <div class="app-topbar-inner page-container">
-      <div>
-        <h1 class="page-title">{{ 'users.title' | translate }}</h1>
-        <p class="page-subtitle" aria-live="polite">
-          {{ 'users.subtitle' | translate: { count: totalUsers() } }}
-        </p>
-      </div>
-    </div>
-  </header>
+  <app-header />
 
   <main class="page-container">
     @if (deleteMessage(); as message) {

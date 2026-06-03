@@ -719,3 +719,39 @@ a:focus-visible {
     transform: translateY(0) scale(1);
   }
 }
+
+@media (max-width: 640px) {
+  .cdk-overlay-pane.dialog-panel {
+    width: 100dvw !important;
+    height: 100dvh !important;
+    max-width: 100dvw !important;
+    max-height: 100dvh !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+
+  .dialog-panel .cdk-dialog-container {
+    width: 100dvw !important;
+    height: 100dvh !important;
+    max-width: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+  }
+
+  .dialog-panel .modal {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100dvh !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow-y: auto !important;
+    padding: var(--space-6) !important;
+    padding-bottom: max(var(--space-6), env(safe-area-inset-bottom)) !important;
+  }
+
+  .dialog-panel .add-user-form {
+    padding-bottom: 40vh; 
+  }
+}

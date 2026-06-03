@@ -1,17 +1,5 @@
 <div class="theme-toggle-wrap">
-  <app-theme-toggle />
 
-  <app-language-toggle />
-
-  @if (authService.isAuthenticated()) {
-    <button
-      type="button"
-      class="btn btn-secondary"
-      (click)="logout()"
-    >
-      {{ 'app.logout' | translate }}
-    </button>
-  }
 </div>
 
 <router-outlet />

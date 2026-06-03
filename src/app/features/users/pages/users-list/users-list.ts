@@ -21,6 +21,7 @@ import { Dialog } from '@angular/cdk/dialog';
 import { AddUserDialog } from '../../../../shared/add-user-dialog/add-user-dialog';
 
 import { EditUserDialog, EditUserDialogData } from '../../../../shared/edit-user-dialog/edit-user-dialog';
+import { AppHeader } from '../../../../shared/app-header/app-header';
 
 const DELETE_MESSAGE_MS = 3000;
 
@@ -33,6 +34,7 @@ export type NameSortOrder = 'default' | 'asc' | 'desc';
     CdkOverlayOrigin,
     CdkConnectedOverlay,
     TranslateModule,
+    AppHeader,
   ],
   templateUrl: './users-list.html',
   styleUrl: './users-list.scss',
