@@ -26,7 +26,27 @@
   }
 
   @media (max-width: 640px) {
+    .modal {
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto; 
+      padding-bottom: 0;
+    }
+  
+    .add-user-form {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+  
     .form-actions {
+      position: sticky;
+      bottom: 0;
+      margin-top: auto;
+      padding: var(--space-4) 0;
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+  
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: var(--space-2);
