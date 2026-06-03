@@ -17,6 +17,9 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../../core/services/auth';
 import { UsersService } from '../../services/users.service';
 
+import { Dialog } from '@angular/cdk/dialog';
+import { AddUserDialog } from '../../../../shared/add-user-dialog/add-user-dialog';
+
 const DELETE_MESSAGE_MS = 3000;
 
 export type NameSortOrder = 'default' | 'asc' | 'desc';
@@ -40,6 +43,8 @@ export class UsersList {
   private readonly destroyRef = inject(DestroyRef);
   private readonly translate = inject(TranslateService);
   private deleteMessageTimer: ReturnType<typeof setTimeout> | null = null;
+
+  private readonly dialog = inject(Dialog);
 
   readonly users = this.usersService.users;
   readonly loading = this.usersService.loading;
@@ -170,6 +175,12 @@ export class UsersList {
       });
 
       this.showAddUserPanel.set(false);
+    });
+  }
+
+  openAddUserDialog(): void {
+    this.dialog.open(AddUserDialog, {
+      panelClass: 'dialog-panel',
     });
   }
 

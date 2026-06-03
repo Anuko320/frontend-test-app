@@ -635,6 +635,11 @@ a:focus-visible {
   
 }
 
+.dialog-panel .cdk-dialog-container {
+  background: transparent;
+  padding: 0;
+}
+
 .cdk-overlay-pane .sort-dropdown {
   display: flex;
   flex-direction: column;
