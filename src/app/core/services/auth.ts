@@ -1,31 +1,50 @@
 import { Injectable, signal } from '@angular/core';
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
+import { HttpClient } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
+
+interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private auth = getAuth();
-  readonly authenticated = signal(false);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  readonly authenticated = signal(!!localStorage.getItem('accessToken'));
 
-  constructor() {
-    onAuthStateChanged(this.auth, (user) => {
-      this.authenticated.set(!!user);
-    });
-  }
-
-  async login(login: string, password: string): Promise<boolean> {
+  async login(username: string, password: string): Promise<boolean> {
     try {
-      await signInWithEmailAndPassword(this.auth, login, password);
-      return true;
+      const response = await this.http
+        .post<LoginResponse>(`${environment.apiUrl}/auth/login`, {
+          username,
+          password,
+        })
+        .toPromise();
+
+      if (response?.accessToken) {
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken);
+        this.authenticated.set(true);
+        return true;
+      }
+
+      return false;
     } catch {
       return false;
     }
   }
 
-  async logout(): Promise<void> {
-    await signOut(this.auth);
+  logout(): void {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     this.authenticated.set(false);
+    this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {

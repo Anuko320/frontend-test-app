@@ -53,14 +53,14 @@ export class UsersList {
   readonly loading = this.usersService.loading;
   readonly error = this.usersService.error;
 
+  readonly pendingDeleteId = signal<number | null>(null);
+  readonly editingUserId = signal<number | null>(null);
+
   readonly searchInput = signal('');
   readonly nameSortOrder = signal<NameSortOrder>('default');
-  readonly pendingDeleteId = signal<string | null>(null);
 
   readonly showAddUserPanel = signal(false);
   readonly showSortDropdown = signal(false);
-
-  readonly editingUserId = signal<string | null>(null);
 
   readonly deleteMessage = signal<string | null>(null);
 
@@ -187,11 +187,11 @@ export class UsersList {
     });
   }
 
-  requestDelete(id: string): void {
+  requestDelete(id: number): void {
     this.pendingDeleteId.set(id);
   }
   
-  openEditUser(user: { id: string; name: string; email: string; city: string }): void {
+  openEditUser(user: { id: number; name: string; email: string; city: string }): void {
     this.dialog.open<unknown, EditUserDialogData>(EditUserDialog, {
       data: user,
       panelClass: 'dialog-panel',
@@ -204,14 +204,12 @@ export class UsersList {
 
   async confirmDelete(): Promise<void> {
     const id = this.pendingDeleteId();
-    if (id === null) {
-      return;
-    }
+    if (id === null) return;
   
     const user = this.users().find((u) => u.id === id);
     this.pendingDeleteId.set(null);
   
-    await this.usersService.deleteUser(String(id));
+    await this.usersService.deleteUser(id);
   
     if (user) {
       this.showDeleteMessage(

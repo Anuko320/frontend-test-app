@@ -5,12 +5,11 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { UsersService } from '../../features/users/services/users.service';
 
 export interface EditUserDialogData {
-  id: string;
+  id: number;
   name: string;
   email: string;
   city: string;
 }
-
 @Component({
   selector: 'app-edit-user-dialog',
   imports: [FormField, TranslateModule],
