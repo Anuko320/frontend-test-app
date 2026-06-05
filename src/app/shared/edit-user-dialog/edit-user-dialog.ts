@@ -5,7 +5,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { UsersService } from '../../features/users/services/users.service';
 
 export interface EditUserDialogData {
-  id: number;
+  id: string;
   name: string;
   email: string;
   city: string;

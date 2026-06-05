@@ -33,8 +33,7 @@ export class Login {
 
     submit(this.loginForm, async () => {
       const { login, password } = this.loginModel();
-      const isValid = this.authService.login(login, password);
-
+      const isValid = await this.authService.login(login, password);
       if (isValid) {
         await this.router.navigate(['/users']);
         return;

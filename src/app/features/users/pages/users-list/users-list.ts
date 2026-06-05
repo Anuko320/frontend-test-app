@@ -55,12 +55,12 @@ export class UsersList {
 
   readonly searchInput = signal('');
   readonly nameSortOrder = signal<NameSortOrder>('default');
-  readonly pendingDeleteId = signal<number | null>(null);
+  readonly pendingDeleteId = signal<string | null>(null);
 
   readonly showAddUserPanel = signal(false);
   readonly showSortDropdown = signal(false);
 
-  readonly editingUserId = signal<number | null>(null);
+  readonly editingUserId = signal<string | null>(null);
 
   readonly deleteMessage = signal<string | null>(null);
 
@@ -187,11 +187,11 @@ export class UsersList {
     });
   }
 
-  requestDelete(id: number): void {
+  requestDelete(id: string): void {
     this.pendingDeleteId.set(id);
   }
-
-  openEditUser(user: { id: number; name: string; email: string; city: string }): void {
+  
+  openEditUser(user: { id: string; name: string; email: string; city: string }): void {
     this.dialog.open<unknown, EditUserDialogData>(EditUserDialog, {
       data: user,
       panelClass: 'dialog-panel',
@@ -202,18 +202,20 @@ export class UsersList {
     this.pendingDeleteId.set(null);
   }
 
-  confirmDelete(): void {
+  async confirmDelete(): Promise<void> {
     const id = this.pendingDeleteId();
     if (id === null) {
       return;
     }
-
-    const removed = this.usersService.deleteUser(id);
+  
+    const user = this.users().find((u) => u.id === id);
     this.pendingDeleteId.set(null);
-
-    if (removed) {
+  
+    await this.usersService.deleteUser(String(id));
+  
+    if (user) {
       this.showDeleteMessage(
-        this.translate.instant('users.deleteSuccess', { name: removed.name }),
+        this.translate.instant('users.deleteSuccess', { name: user.name }),
       );
     }
   }
